@@ -15,5 +15,12 @@ typedef struct s_command {
 	char				**args;
 	t_redirect			*redirections; // Eine Liste von Umleitungen
 	struct s_command	*next;		// Ein Zeiger auf den nächsten Befehl (für Pipes)
-} t_command;
+}	t_command;
 
+typedef struct s_history {
+	char		*prompt;
+	struct s_history	*before;
+	struct s_history	*next;
+}	t_history;
+
+char	**lex(char const *s, char c);
