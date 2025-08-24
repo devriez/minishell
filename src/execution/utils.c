@@ -1,89 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utilc.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/04 19:50:06 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/04 23:27:10 by devriez          ###   ########.fr       */
+/*   Created: 2025/08/24 20:38:48 by amoiseik          #+#    #+#             */
+/*   Updated: 2025/08/24 20:39:36 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "minishell.h"
 
-void	free_arr(char **arr)
+t_command	johannes_func(char	*line)
 {
-	int	i;
+	t_command	res;
 
-	i = 0;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i ++;
-	}
-	free(arr);
+	return (res);
 }
 
-char	*get_PATH(char **envv)
+void	handle_signal(int signum)
 {
-	int	i;
-	
-	i = 0;
-	while (envv[i])
-	{
-		if (ft_strnstr(envv[i], "PATH", 4) == envv[i])
-			return (envv[i] + ft_strlen("PATH="));
-		i ++;
-	}
-	return (NULL);
+	(void)signum;
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
-char	*get_cmd_path(char *cmd_name, char **envv)
+int	is_internal(char *cmd)
 {
-	char	**paths;
-	char	*full_path;
-	char	*path_with_slash;
-	int		i;
-
-	i = 0;
-	paths = ft_split(get_PATH(envv), ":");
-	while (paths[i])
-	{
-		path_with_slash = ft_strjoin(paths[i], "/");
-		if (!path_with_slash)
-			return (NULL);
-		full_path = ft_strjoin(path_with_slash, cmd_name);
-		free(path_with_slash);
-		if (!full_path)
-			return(NULL);
-		if (access(full_path, X_OK))
-		{
-			free_arr(paths);
-			return (full_path);
-		}
-		free(full_path);
-		i ++;
-	}
-	return (free_arr(paths), NULL);
+	if (cmd == "echo" || cmd == "cd" || cmd == "pwd" || cmd == "export" || \
+		cmd == "unset" || cmd == "env" || cmd == "exit")
+		return (1);
+	return (0);
 }
 
-void execute(char *cmd_from_input, char **envv)
+int	execute_internal(t_command *cmd, char **envp)
 {
-	char **cmd;
-	char **cmd_path;
-	
-	cmd = ft_split(cmd_from_input, ' ');
-	cmd_path = get_cmd_path(cmd[0], envv);
-	if (!cmd_path)
-	{
-		free_arr(cmd);
-		log_error('command is not executable');
-	}
-	if(execve(cmd_path, cmd, envv) == -1);
-	{
-		free(cmd_path);
-		free_arr(cmd);
-		sys_error("Error with execve");
-	}
+	return (0);
+}
+
+void	child_procces(t_command *cmd, char **envv, int *pipe_fd)
+{
+
 }

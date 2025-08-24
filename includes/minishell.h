@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/22 15:32:38 by devriez          ###   ########.fr       */
+/*   Updated: 2025/08/24 20:44:36 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,13 @@ typedef struct s_command {
 # include <readline/history.h> // add_history
 
 extern int g_last_exit_status;
+
+//utils
+void	handle_signal(int signum);
+int		is_internal(char *cmd);
+int		execute_internal(t_command *cmd, char **envp);
+
+//delete !!!!!!11
+t_command	johannes_func(char	*line)
 
 #endif

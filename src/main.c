@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/22 17:01:18 by devriez          ###   ########.fr       */
+/*   Updated: 2025/08/24 20:54:02 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,88 +14,70 @@
 
 int	g_last_exit_status = 0;
 
-t_command	johannes_func(char	*line)
+void	fork_and_execute(t_command *cmd, char **envp)
 {
-	t_command	res;
+	pid_t	pid;
 
-	return res;
+	pid = fork();
+	if (pid == -1)
+		printf("Error with forking!!!!!!");
+	else if (pid == 0)
+		child_procces(cmd, envp);
+	waitpid(pid, NULL, 0);
 }
 
-void	handle_signal(int	signum)
+void	redefine_and_close_fd(t_command *cmd, int *pipe_fd, int fd_0_last_pipe)
 {
-	(void)signum;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	
+	if (fd_0_last_pipe)
+	{
+		dup2(fd_0_last_pipe, STDIN_FILENO);
+		close(fd_0_last_pipe);
+	}
+	if (cmd->next)
+	{
+		fd_0_last_pipe = pipe_fd[0];
+		dup2(pipe_fd[1], STDOUT_FILENO);
+		close(pipe_fd[1]);
+	}
 }
 
-int	is_buildin(char *cmd)
+void	handle_multiply_cmds(t_command *cmd, char **envp)
 {
-	if (cmd == "echo" || cmd == "cd" || cmd == "pwd" || cmd == "export" ||
-		cmd == "unset" || cmd == "env" || cmd == "exit")
-		return (1);
-	return (0);
-}
-
-int	handle_buildin(t_command *cmd)
-{
-	return (0);
-}
-
-void	child_procces(t_command *cmd, char ** envv, int *pipe_fd)
-{
-	
-}
-
-void	handle_single_coomand(t_command	*cmd, char **envp)
-{
-	
-}
-
-void	handle_commands(t_command	*cmd, char **envp)
-{
-	int			pipe_fd[2];
-	int			fd_0_last_pipe;
-	pid_t		pid;
+	int	pipe_fd[2];
+	int	fd_0_last_pipe;
 
 	fd_0_last_pipe == 0;
-	while(cmd->next)
+	while (cmd)
 	{
-		if (pipe(pipe_fd) != -1)
-			printf("Error with making pipe!!!!!"); // тут добавить ощищение и вывод ошибки
-		if (fd_0_last_pipe != 0)
+		if (cmd->next)
 		{
-			dup2(fd_0_last_pipe, STDIN_FILENO); //тут добавить, когда есть перенаправление
-			close(fd_0_last_pipe);
-		}	
-		fd_0_last_pipe = pipe_fd[0];
-		pid = fork();
-		if (pid == 1)
-			printf("Error with forking!!!!!!"); // тут добавить очищение и вывод ошибки
-		else if (pid == 0)
-			child_procces(cmd, envp, pipe_fd);
-		waitpid(pid, NULL, 0);
+			if (pipe(pipe_fd) != -1)
+				printf("Error with making pipe!!!!!");
+		}
+		redefine_and_close_fd(cmd, pipe_fd, fd_0_last_pipe);
+		fork_and_execute(cmd, envp);
+		cmd = cmd->next;
 	}
-	if (fd_0_last_pipe != 0)
+}
+
+void	handle_single_cmd(t_command *cmd, char **envp)
+{
+	char	*cmd_name;
+
+	cmd_name = cmd->args[0];
+	if (is_internal(cmd_name))
+		g_last_exit_status = execute_internal(cmd, envp);
+	else
 	{
-		dup2(fd_0_last_pipe, STDIN_FILENO); //тут добавить, когда есть перенаправление
-		close(fd_0_last_pipe);
-		pid = fork();
-		if (pid == 1)
-			printf("Error with forking!!!!!!"); // тут добавить очищение и вывод ошибки
-		else if (pid == 0)
-			child_procces(cmd, envp, pipe_fd);
-		waitpid(pid, NULL, 0);
-	}	
+		fork_and_execute(cmd, envp);
+	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
 	t_command	cmd;
-	
+
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
@@ -114,5 +96,3 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (0);
 }
-		if (is_buildin(cmd.args[0]) && !cmd.next)
-			g_last_exit_status = handle_buildin(cmds);
