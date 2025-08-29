@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   error_and_free.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 11:42:50 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/08/05 12:19:45 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/08/28 13:33:30 by devriez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "minishell.h"
 
 void	sys_error(char *message)
 {
@@ -35,4 +35,22 @@ void	free_arr(char **arr)
 		i ++;
 	}
 	free(arr);
+}
+
+void ft_free_env_list(t_env *head)
+{
+	t_env *current;
+	t_env *next_node;
+
+	current = head;
+	while (current)
+	{
+		next_node = current->next;
+		if (current->name)
+ 			free(current->name);
+		if (current->value)
+			free(current->value);
+		free(current);
+		current = next_node;
+	}
 }
