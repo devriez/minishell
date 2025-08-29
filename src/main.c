@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/28 13:40:31 by devriez          ###   ########.fr       */
+/*   Updated: 2025/08/29 16:24:48 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	handle_single_cmd(t_command *cmd, t_env *lockal_envp)
 	char	*cmd_name;
 
 	cmd_name = cmd->args[0];
-	if (is_internal(cmd_name))
+	if (is_builtin(cmd_name))
 			g_last_exit_status = execute_internal(cmd, lockal_envp);
 	else
 	{

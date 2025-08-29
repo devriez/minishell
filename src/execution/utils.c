@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 20:38:48 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/08/28 14:24:56 by devriez          ###   ########.fr       */
+/*   Updated: 2025/08/29 16:26:00 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,7 @@ void	handle_signal(int signum)
 	rl_redisplay();
 }
 
-bool	is_internal(char *cmd)
-{
-	if (ft_strcmp(cmd, "echo") == 0 || \
-		ft_strcmp(cmd, "cd") == 0|| \
-		ft_strcmp(cmd,"pwd")  == 0|| \
-		ft_strcmp(cmd,"export") == 0|| \
-		ft_strcmp(cmd, "unset") == 0|| \
-		ft_strcmp(cmd, "env") == 0|| \
-		ft_strcmp(cmd, "exit") == 0)
-		return (true);
-	return (false);
-}
+
 
 void	child_procces(t_command *cmd, char **envv, int *pipe_fd)
 {

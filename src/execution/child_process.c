@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:20:57 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/08/24 20:56:25 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/08/29 16:24:48 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	child_process(t_command *cmd, char **envp)
 
 	cmd_name = cmd->args[0];
 
-	if (is_internal(cmd_name))
+	if (is_builtin(cmd_name))
 		g_last_exit_status = execute_internal(cmd, envp);
 	else
 		execute_external(cmd, envp);

@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/28 19:03:40 by devriez          ###   ########.fr       */
+/*   Updated: 2025/08/29 16:23:35 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void update_cd_env(t_env **lockal_envp, char *old_pwd_val, char *path)
+void	update_cd_env(t_env **lockal_envp, char *old_pwd_val, char *path)
 {
 	set_env_var(lockal_envp, "OLDPWD", old_pwd_val);
 	set_env_var(lockal_envp, "PWD", path);
 }
 
-char *get_cd_path(char *arg, t_env *lockal_envp)
+char	*get_cd_path(char *arg, t_env *lockal_envp)
 {
-	char *path;
+	char	*path;
 
 	if (!arg || ft_strcmp(arg, "~") == 0)
 	{
@@ -46,7 +46,7 @@ char *get_cd_path(char *arg, t_env *lockal_envp)
 	return (path);
 }
 
-int cd_builtin(t_command *cmd, t_env **lockal_envp)
+int	cd_builtin(t_command *cmd, t_env **lockal_envp)
 {
 	char	*path;
 	char	*old_pwd_val;

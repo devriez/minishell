@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 19:08:36 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/27 23:18:14 by devriez          ###   ########.fr       */
+/*   Updated: 2025/08/29 16:22:27 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 bool	has_n_flag(t_command *cmd)
 {
-	char *flags;
+	char	*flags;
 
 	flags = cmd->args[1];
-	if(!flags || *flags != '-')
+	if (!flags || *flags != '-')
 		return (false);
 	flags ++;
 	while (*flags != '\0' && *flags == 'n')
@@ -28,7 +28,7 @@ bool	has_n_flag(t_command *cmd)
 		return (false);
 }
 
-int	echo_buildtin(t_command *cmd)
+int	echo_builtin(t_command *cmd)
 {
 	char	**text;
 
