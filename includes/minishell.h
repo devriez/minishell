@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/29 20:59:18 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/08/30 13:14:16 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,11 @@ int		cd_builtin(t_command *cmd, t_env **lockal_env);
 int		pwd_builtin(t_env *lockal_env);
 
 //env
+bool	is_correct_varname(char *name);
+bool	is_env_var_exist(t_env *lockal_env, char *var_name);
 char	*get_env_var(t_env *lockal_env, char *var_name);
 void	add_node_to_end(t_env **head, t_env	*new_node);
+t_env	*create_env_node(char *pair_name_value, char *name, char *value);
 int		set_env_var(t_env **lockal_env, char *name, char *value);
 t_env	*env_to_list(char **envp);
 void	sort_env(t_env *local_env);
