@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/02 17:38:03 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/02 18:19:17 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,14 @@ int		pwd_builtin(t_env *lockal_env);
 //	env_utils
 bool	is_correct_varname(char *name);
 bool	is_env_var_exist(t_env *lockal_env, char *var_name);
+char	**parse_envv(char *name_eq_value);
 //	get_and_sort
 char	*get_env_var(t_env *lockal_env, char *var_name);
 void	sort_env(t_env *local_env);
 //	set_envv
 int		set_env_var_from_pair(t_env **lockal_env, char *name, char *value);
+int		set_env_var_from_str(t_env **lockal_env, char *name_equal_value);
 //	env_to_list
-char	**parse_envv(char *name_eq_value);
 t_env	*env_to_list(char **envp);
 
 

@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 19:11:40 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/02 18:11:13 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/02 18:19:36 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,9 @@ int	set_env_var_from_pair(t_env **lockal_env, char *var_name, char *var_value)
 		add_node_to_end(lockal_env, new_node);
 		return (0);
 	}
+}
+
+int	set_env_var_from_str(t_env **lockal_env, char *name_equal_value)
+{
+//write a body of this function
 }

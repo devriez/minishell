@@ -6,40 +6,11 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 19:50:06 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/02 18:08:02 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/02 18:16:18 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	**parse_envv(char *name_eq_value)
-{
-	char	*equal_sign;
-	char	**arr_name_value;
-
-	arr_name_value = malloc(sizeof(char *) * 2);
-	if (!arr_name_value) 
-		return (NULL);
-	equal_sign = ft_strchr(name_eq_value, '=');
-	if (!equal_sign)
-	{
-		arr_name_value[0] = ft_strdup(name_eq_value);
-		if (!arr_name_value[0]) 
-			return (free(arr_name_value[0]), free(arr_name_value), NULL);
-		arr_name_value[1] = NULL;
-		return (arr_name_value);
-	}
-	arr_name_value[0] = ft_strndup(name_eq_value, equal_sign - name_eq_value);
-	arr_name_value[1] = ft_strdup(equal_sign + 1);
-	if (!arr_name_value[0] || !arr_name_value[1]) 
-	{
-		free(arr_name_value[0]);
-		free(arr_name_value[1]);
-		free(arr_name_value);
-		return (NULL);
-	}
-	return (arr_name_value);
-}
 
 t_env	*env_to_list(char **envp)
 {
