@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand.c                                           :+:      :+:    :+:   */
+/*   typing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 16:08:11 by johartma          #+#    #+#             */
-/*   Updated: 2025/09/01 18:12:07 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/02 11:12:41 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include "../libft/libft.h"
 
-static	t_tokens	*get_type(char **lexed, t_tokens **tokens)
+t_tokens	*get_type(char **lexed, t_tokens **tokens)
 {
 	size_t	len_tokens;
 	size_t	i;
@@ -46,11 +46,5 @@ static	t_tokens	*get_type(char **lexed, t_tokens **tokens)
 		i++;
 	}
 	return (*tokens);
-
 }
 
-t_tokens	*expand(char **lexed)
-{
-	t_tokens	*tokens;
-	
-}

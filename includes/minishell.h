@@ -10,8 +10,8 @@ typedef enum e_word_type {
 	OUTPUT,	  // >
 	APPEND,	  // >>
 	HEREDOC,	  // <<
-	PIPE,
-	WORD
+	PIPE,  // |
+	WORD 
 } t_word_type;
 
 typedef enum e_word_flags {
@@ -65,3 +65,4 @@ typedef struct s_tokens {
 char	**lex(char const *s);
 
 t_tokens	*expand(char **lexed);
+t_tokens	*get_type(char **lexed, t_tokens **tokens);

@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 19:09:32 by johartma          #+#    #+#             */
-/*   Updated: 2025/08/21 16:20:51 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/02 11:55:23 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,66 +21,99 @@ static int	is_parent(char c)
 		return (0);
 }
 
-static int	count_words(const char *s)
+static int	op_len(const char *s)
 {
-	int	i[3];
-
-	i[0] = 0;
-	i[1] = 0;
-	i[2] = 0;
-	if (!s)
+	if (!s || !*s)
 		return (0);
-	while (*s)
-	{
-		if (!i[2] && *s == ' ')
-			i[1] = 0;
-		else
-		{
-			if (!i[1])
-			{
-				i[0]++;
-				i[1] = 1;
-			}
-			if (is_parent(*s))
-			{
-				if (!i[2])
-					i[2] = *s;
-				else if (i[2] == *s)
-					i[2] = 0;
-			}
-		}
-		s++;
-	}
-	return (i[0]);
+	if (s[0] == '<' && s[1] == '<')
+		return (2);
+	if (s[0] == '>' && s[1] == '>')
+		return (2);
+	if (s[0] == '<' || s[0] == '>' || s[0] == '|')
+		return (1);
+	return (0);
 }
 
-static int	get_word_span(const char *s, size_t *emit, size_t *span)
+static int  count_words(const char *s)
 {
-	char	in_parent;
+    int count = 0;
+    char in_parent = 0;
 
-	in_parent = 0;
-	while (s[*span] && (in_parent || s[*span] != ' '))
-	{
-		if (s[*span] == '"' || s[*span] == '\'')
-		{
-			if (!in_parent || in_parent == s[*span])
-			{
-				if (!in_parent)
-					in_parent = s[*span];
-				else
-					in_parent = 0;
-				(*span)++;
-			}
-		}
-		else
-		{
-			(*emit)++;
-			(*span)++;
-		}
-	}
-	if (in_parent)
-		return (-1);
-	return (0);
+    if (!s) return 0;
+
+    while (*s) {
+        // skip spaces
+        while (*s == ' ') s++;
+        if (!*s) break;
+
+        // operator token?
+        int opl = op_len(s);
+        if (!in_parent && opl > 0) {
+            count++;
+            s += opl;
+            continue;
+        }
+
+        // normal word (may contain quotes)
+        count++;
+        while (*s) {
+            if (!in_parent && *s == ' ') break;
+
+            // stop normal word when an operator starts (unless inside quotes)
+            if (!in_parent) {
+                int inner_opl = op_len(s);
+                if (inner_opl > 0) break;
+            }
+
+            if (*s == '"' || *s == '\'') {
+                if (!in_parent) in_parent = *s;
+                else if (in_parent == *s) in_parent = 0;
+                s++; // consume the quote
+            } else {
+                s++; // consume normal char
+            }
+        }
+    }
+    return count;
+}
+
+static int  get_word_span(const char *s, size_t *emit, size_t *span)
+{
+    char in_parent = 0;
+
+    *emit = 0;
+    *span = 0;
+
+    // if token starts with an operator, emit it as a standalone token
+    int opl = op_len(s);
+    if (opl > 0) {
+        *span = opl;
+        *emit = opl;
+        return 0;
+    }
+
+    // otherwise scan a normal word, stopping at space or operator (unless quoted)
+    while (s[*span] && (in_parent || s[*span] != ' ')) {
+        if (!in_parent) {
+            int inner_opl = op_len(&s[*span]);
+            if (inner_opl > 0) break; // end of this word before the operator
+        }
+        if (s[*span] == '"' || s[*span] == '\'') {
+            if (!in_parent || in_parent == s[*span]) {
+                if (!in_parent) in_parent = s[*span];
+                else in_parent = 0;
+                (*span)++; // do not count quote in emit
+            } else {
+                (*emit)++;
+                (*span)++;
+            }
+        } else {
+            (*emit)++;
+            (*span)++;
+        }
+    }
+    if (in_parent) return -1; // unclosed quote
+    return 0;
 }
 
 void	lex_free(char **arr, int i)

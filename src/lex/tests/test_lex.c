@@ -27,17 +27,7 @@ static void free_tokens(char **toks) {
 
 static int same_tokens(char **got, const char *exp[]) {
     size_t i = 0;
-    if (!got) return 0;int main(void) {
-    test_empty_input();
-    test_simple_split();
-    test_quotes_grouping();
-    test_empty_quotes_are_tokens();
-    test_adjacent_quotes_in_word();
-    test_leading_trailing_spaces();
-    test_unmatched_quotes_error();
-    puts("OK");
-    return 0;
-}
+    if (!got) return 0;
     for (;; ++i) {
         const char *e = exp[i];
         const char *g = got[i];
@@ -147,6 +137,24 @@ static void test_unmatched_quotes_error(void) {
     assert(t == NULL);
 }
 
+static void test_redir_operators(void) {
+    const char *exp1[] = {"a", "|", "b", NULL};
+    char **t = lex("a|b");
+    assert(same_tokens(t, exp1));
+    free_tokens(t);
+
+
+    const char *exp2[] = {"a", "|", "b", NULL};
+    t = lex("a | b");
+    assert(same_tokens(t, exp2));
+    free_tokens(t);
+
+    const char *exp3[] = {"a", "<<", "b", NULL};
+    t = lex("a<<b");
+    assert(same_tokens(t, exp3));
+    free_tokens(t);
+}
+
 int main(void) {
     test_empty_input();
     test_simple_split();
@@ -155,6 +163,7 @@ int main(void) {
     test_adjacent_quotes_in_word();
     test_leading_trailing_spaces();
     test_unmatched_quotes_error();
+    test_redir_operators();
     puts("OK");
     return 0;
 }

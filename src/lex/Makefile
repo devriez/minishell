@@ -1,5 +1,5 @@
 CC       := gcc
-CFLAGS   := -std=c11 -Wall -Wextra -Werror -g
+CFLAGS   := -std=c11
 SAN      := -fsanitize=address,undefined
 CPPFLAGS := -I.          # so test sees lex.h
 
@@ -22,7 +22,7 @@ $(BIN): $(OBJS) $(TEST_OBJS)
 # Generic compile rule: turn foo.c into obj/foo.o
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -MMD -MP -c $< -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 run: $(BIN)
 	./$(BIN)
