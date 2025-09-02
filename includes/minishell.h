@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/30 13:14:16 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/02 17:38:03 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_redirect {
 }	t_redirect;
 
 typedef struct s_command {
+	char				*name;
 	char				**args;
 	t_redirect			*redirections; // Eine Liste von Umleitungen
 	struct s_command	*next;		// Ein Zeiger auf den nächsten Befehl (für Pipes)
@@ -64,14 +65,20 @@ int		cd_builtin(t_command *cmd, t_env **lockal_env);
 int		pwd_builtin(t_env *lockal_env);
 
 //env
+//	env_utils
 bool	is_correct_varname(char *name);
 bool	is_env_var_exist(t_env *lockal_env, char *var_name);
+//	get_and_sort
 char	*get_env_var(t_env *lockal_env, char *var_name);
-void	add_node_to_end(t_env **head, t_env	*new_node);
-t_env	*create_env_node(char *pair_name_value, char *name, char *value);
-int		set_env_var(t_env **lockal_env, char *name, char *value);
-t_env	*env_to_list(char **envp);
 void	sort_env(t_env *local_env);
+//	set_envv
+int		set_env_var_from_pair(t_env **lockal_env, char *name, char *value);
+//	env_to_list
+char	**parse_envv(char *name_eq_value);
+t_env	*env_to_list(char **envp);
+
+
+
 
 //error_and_free
 void	ft_free_env_list(t_env *head);

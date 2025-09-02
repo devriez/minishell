@@ -6,55 +6,63 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 19:50:06 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/08/30 14:23:27 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/02 18:08:02 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*parse_and_create_env_node(char *pair_name_value)
+char	**parse_envv(char *name_eq_value)
 {
 	char	*equal_sign;
-	char	*name;
-	char	*value;
-	t_env	*node;
+	char	**arr_name_value;
 
-	equal_sign = ft_strchr(pair_name_value, '=');
-	if (!equal_sign)
+	arr_name_value = malloc(sizeof(char *) * 2);
+	if (!arr_name_value) 
 		return (NULL);
-	name = ft_strndup(pair_name_value, equal_sign - pair_name_value);
-	value = ft_strdup(equal_sign + 1);
-	if (!name || !value)
+	equal_sign = ft_strchr(name_eq_value, '=');
+	if (!equal_sign)
 	{
-		free(name);
-		free(value);
+		arr_name_value[0] = ft_strdup(name_eq_value);
+		if (!arr_name_value[0]) 
+			return (free(arr_name_value[0]), free(arr_name_value), NULL);
+		arr_name_value[1] = NULL;
+		return (arr_name_value);
+	}
+	arr_name_value[0] = ft_strndup(name_eq_value, equal_sign - name_eq_value);
+	arr_name_value[1] = ft_strdup(equal_sign + 1);
+	if (!arr_name_value[0] || !arr_name_value[1]) 
+	{
+		free(arr_name_value[0]);
+		free(arr_name_value[1]);
+		free(arr_name_value);
 		return (NULL);
 	}
-	node = create_env_node_from_pair(name, value);
-	free(name);
-	free(value);
-	return (node);
+	return (arr_name_value);
 }
 
 t_env	*env_to_list(char **envp)
 {
 	int		i;
-	t_env	*head;
-	t_env	*current;
-	t_env	*node;
+	t_env	*lockal_env;
+	char	**name_value;
 
+	lockal_env = NULL;
 	i = 0;
-	head = NULL;
 	while (envp[i])
 	{
-		node = parse_and_create_env_node(envp[i]);
-		if (!node)
+		name_value = parse_envv(envp[i]);
+		if (name_value == NULL)
+			return (NULL);
+		if (set_env_var_from_pair(&lockal_env, name_value[0], name_value[1]))
 		{
-			ft_free_env_list(head);
+			ft_free_env_list(lockal_env);
 			return (NULL);
 		}
-		add_node_to_end(&head, node);
+		free(name_value[0]);
+		free(name_value[1]);
+		free(name_value);
 		i++;
 	}
-	return (head);
+	return (lockal_env);
 }
