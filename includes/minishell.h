@@ -62,7 +62,7 @@ typedef struct s_tokens {
 	t_meta			meta;
 }	t_tokens;
 
+
 char	**lex(char const *s);
 
-t_tokens	*expand(char **lexed);
 t_tokens	*get_type(char **lexed, t_tokens **tokens);
