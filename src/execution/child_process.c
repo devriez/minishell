@@ -6,41 +6,39 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:20:57 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/08/29 16:24:48 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:00:17 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute(char *cmd_from_input, char **envp)
+int	execute_external(t_command *cmd, t_env *lockal_env)
 {
-	char	**cmd;
 	char	*cmd_path;
 
-	cmd = ft_split(cmd_from_input, ' ');
-	cmd_path = get_cmd_path(cmd[0], envp);
+	cmd_path = get_cmd_path(cmd->name, lockal_env);
 	if (!cmd_path)
 	{
-		free_arr(cmd);
-		log_error("command is not executable");
+		printf("Command '%s' is not executable", cmd->name);
+		return (1);
 	}
-	else if (execve(cmd_path, cmd, envp) == -1)
+	if (execve(cmd_path, cmd, envv) == -1) //thinking here
 	{
 		free(cmd_path);
-		free_arr(cmd);
-		sys_error("Error with execve");
+		printf("Error with execve");
+		return (1);
 	}
+	return (0);
 }
 
-void	child_process(t_command *cmd, char **envp)
+int	child_process(t_command *cmd, t_env *lockal_env)
 {
-	char	cmd_name;
+	int		exit_status;
 
-	cmd_name = cmd->args[0];
-
-	if (is_builtin(cmd_name))
-		g_last_exit_status = execute_internal(cmd, envp);
+	if (is_builtin(cmd->name))
+		exit_status = execute_builtin(cmd, lockal_env);
 	else
-		execute_external(cmd, envp);
+		exit_status = execute_external(cmd, lockal_env);
+	return (exit_status);
 }
 

@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/29 16:24:48 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:45:01 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,26 @@
 
 int	g_last_exit_status = 0;
 
-void	fork_and_execute(t_command *cmd, t_env *lockal_envp)
+void	fork_and_execute(t_command *cmd, t_env *lockal_env)
 {
-	
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		printf("Error with forking!!!!!!");
+		g_last_exit_status = 1;
+		return ;
+	}
+	else if (pid == 0)
+		exit(child_procces(cmd, lockal_env));
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		g_last_exit_status = WEXITSTATUS(status);
+	else
+		g_last_exit_status = 1;
 }
-
-// void	fork_and_execute(t_command *cmd, t_env *lockal_envp)
-// {
-// 	pid_t	pid;
-
-// 	pid = fork();
-// 	if (pid == -1)
-// 		printf("Error with forking!!!!!!");
-// 	else if (pid == 0)
-// 		child_procces(cmd, envp);
-// 	waitpid(pid, NULL, 0);
-// }
 
 void	redefine_and_close_fd(t_command *cmd, int *pipe_fd, int fd_0_last_pipe)
 {
@@ -46,12 +50,12 @@ void	redefine_and_close_fd(t_command *cmd, int *pipe_fd, int fd_0_last_pipe)
 	}
 }
 
-void	handle_multiply_cmds(t_command *cmd, t_env *lockal_envp)
+void	handle_multiply_cmds(t_command *cmd, t_env *lockal_env)
 {
-	
+
 }
 
-// void	handle_multiply_cmds(t_command *cmd, t_env *lockal_envp)
+// void	handle_multiply_cmds(t_command *cmd, t_env *lockal_env)
 // {
 // 	int	pipe_fd[2];
 // 	int	fd_0_last_pipe;
@@ -70,16 +74,16 @@ void	handle_multiply_cmds(t_command *cmd, t_env *lockal_envp)
 // 	}
 // }
 
-void	handle_single_cmd(t_command *cmd, t_env *lockal_envp)
+void	handle_single_cmd(t_command *cmd, t_env *lockal_env)
 {
 	char	*cmd_name;
 
 	cmd_name = cmd->args[0];
 	if (is_builtin(cmd_name))
-			g_last_exit_status = execute_internal(cmd, lockal_envp);
+		g_last_exit_status = execute_builtin(cmd, lockal_env);
 	else
 	{
-		fork_and_execute(cmd, lockal_envp);
+		fork_and_execute(cmd, lockal_env);
 	}
 }
 
@@ -87,11 +91,11 @@ int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
 	t_command	*cmd;
-	t_env		*lockal_envp;
+	t_env		*lockal_env;
 
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, SIG_IGN);
-	lockal_envp = env_to_list(envp);
+	lockal_env = env_to_list(envp);
 	while (1)
 	{
 		line = readline("minishell> ");
@@ -102,9 +106,9 @@ int	main(int argc, char **argv, char **envp)
 		}
 		cmd = johannes_func(line);
 		if (cmd->next)
-			handle_multiply_cmds(cmd, lockal_envp);
+			handle_multiply_cmds(cmd, lockal_env);
 		else
-			handle_single_cmd(cmd, lockal_envp);
+			handle_single_cmd(cmd, lockal_env);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/03 15:03:57 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/03 19:48:50 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,12 @@ extern int g_last_exit_status;
 //utils.c
 void	handle_signal(int signum);
 
-//get_cmd_path.c
-char	*get_cmd_path(char *cmd_name, char **envp);
+//execution
+//	get_cmd_path.c
+char	*get_cmd_path(char *cmd_name, t_env *lockal_env);
 
 //buildins
-int		execute_internal(t_command *cmd, t_env *lockal_envp);
+int		execute_builtin(t_command *cmd, t_env *lockal_envp);
 bool	is_builtin(char *cmd);
 int		echo_builtin(t_command *cmd);
 int		cd_builtin(t_command *cmd, t_env *lockal_env);
@@ -78,7 +79,6 @@ int		set_envv_from_pair(t_env **lockal_env, char *name, char *value);
 int		set_envv_from_str(t_env **lockal_env, char *name_equal_value);
 //	env_to_list
 t_env	*env_to_list(char **envp);
-
 
 
 
