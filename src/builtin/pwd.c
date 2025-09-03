@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_to_list.c                                      :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/04 19:50:06 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/03 15:17:51 by amoiseik         ###   ########.fr       */
+/*   Created: 2025/08/28 19:14:26 by devriez           #+#    #+#             */
+/*   Updated: 2025/08/29 16:17:18 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*env_to_list(char **envp)
+int	pwd_builtin(t_env *lockal_env)
 {
-	int		i;
-	t_env	*lockal_env;
-	char	**name_value;
+	char	*working_dir;
 
-	lockal_env = NULL;
-	i = 0;
-	while (envp[i])
+	working_dir = get_env_var(lockal_env, "PWD");
+	if (!working_dir)
 	{
-		set_envv_from_str(&lockal_env, envp[i]);
-		i ++;
+		printf("minishell: pwd: PWD not set\n");
+		return (1);
 	}
-	return (lockal_env);
+	printf("%s\n", working_dir);
+	free(working_dir);
+	return (0);
 }
