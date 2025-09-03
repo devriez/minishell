@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 10:46:56 by johartma          #+#    #+#             */
-/*   Updated: 2025/09/03 19:28:56 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:12:51 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,20 @@ static int	create_tempfile(void)
 
 static int	write_to_tempfile(int fd, char *buffer);
 
-static char	*expand_herdoc(char *buffer, char *delim);
+static char	*expand_heredoc(char *buffer, char *delim);
+
+static void no_delim_warning(void);
+
+static t_redirect	prepare_heredoc_redir(int fd)
+{
+	t_redirect	redirect;
+
+	redirect.type = HEREDOC;
+	redirect.file = NULL;
+	redirect.heredoc_fd = fd;
+	redirect.next = NULL;
+	return (redirect);
+}
 
 t_redirect	read_heredoc(char *delim, int type)
 {
@@ -47,7 +60,6 @@ t_redirect	read_heredoc(char *delim, int type)
 	char	*tmpfilepath;
 	char	*buffer;
 	char	*read;
-	t_redirect	redirect;
 	
 	// 1. Read lines to read
 	read = 0;
@@ -56,14 +68,22 @@ t_redirect	read_heredoc(char *delim, int type)
 	{
 		buffer = readline(NULL);
 		if (!buffer || !strcmp(delim, buffer))
+		{
+			if (buffer)
+				free(buffer);
+			else
+				no_delim_warning();
 			break ;
+		}
 		ft_strjoin(read, buffer);
 		free(buffer);
 	}
-	// 2. Create Tempfile
-	
+	buffer = expand_heredoc(buffer, type);
 	fd = create_tempfile();
-	write_to_tempfile(fd, buffer);
-	
+	if (!fd)
+		handle_tmp_creation_err_here();
+	if (!write_to_tempfile(fd, buffer))
+		handle_write_error_here();
+	return (prepare_heredoc_redir(fd));
 }
 
