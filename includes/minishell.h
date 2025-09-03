@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/03 17:43:55 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:45:05 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,34 @@ typedef struct s_env {
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_history {
+	char				*prompt;
+	struct s_history	*before;
+	struct s_history	*next;
+}	t_history;
+
+typedef struct s_word {
+	char			*text;
+	t_word_flags	*mask;
+	size_t			len;
+}	t_word;
+
+typedef struct s_meta
+{
+	unsigned has_qoutes : 1;
+	unsigned is_here_delim : 1;
+	unsigned delim_qouted : 1;
+}	t_meta;
+
+typedef struct s_tokens {
+	char			*text;
+	t_word_flags	*mask;
+	size_t			len;
+	t_word_type		type;
+	t_meta			meta;
+}	t_tokens;
+
+
 # include "libft.h" // libft
 # include <unistd.h> // dup2, fork, chdir
 # include <sys/types.h> // fork(pid_t)
@@ -104,34 +132,6 @@ void	ft_free_env_list(t_env *head);
 
 //delete !!!!!!11
 t_command	*johannes_func(char	*line);
-
-typedef struct s_history {
-	char				*prompt;
-	struct s_history	*before;
-	struct s_history	*next;
-}	t_history;
-
-typedef struct s_word {
-	char			*text;
-	t_word_flags	*mask;
-	size_t			len;
-}	t_word;
-
-typedef struct s_meta
-{
-	unsigned has_qoutes : 1;
-	unsigned is_here_delim : 1;
-	unsigned delim_qouted : 1;
-}	t_meta;
-
-typedef struct s_tokens {
-	char			*text;
-	t_word_flags	*mask;
-	size_t			len;
-	t_word_type		type;
-	t_meta			meta;
-}	t_tokens;
-
 
 char	**lex(char const *s);
 
