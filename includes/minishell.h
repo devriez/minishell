@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/03 18:07:50 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:10:16 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef enum e_word_flags {
 typedef struct s_redirect {
 	t_redirect_type		type;
 	char				*file;
+	int					heredoc_fd;
 	struct s_redirect	*next;
 }	t_redirect;
 
