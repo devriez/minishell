@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:08:08 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/29 16:28:43 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:34:02 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,14 @@
 
 int	execute_internal(t_command *cmd, t_env *lockal_env)
 {
-	char	*cmd_name;
-
-	cmd_name = cmd->args[0];
-	if (ft_strcmp(cmd_name, "echo") == 0)
+	if (ft_strcmp(cmd->name, "echo") == 0)
 		echo_builtin(cmd);
-	if (ft_strcmp(cmd_name, "cd") == 0)
-		cd_builtin(cmd_name, lockal_env);
-	if (ft_strcmp(cmd, "pwd") == 0)
+	if (ft_strcmp(cmd->name, "cd") == 0)
+		cd_builtin(cmd, lockal_env);
+	if (ft_strcmp(cmd->name, "pwd") == 0)
 		pwd_builtin(lockal_env);
-	if (ft_strcmp(cmd, "export"))
-		
+	if (ft_strcmp(cmd->name, "export"))
+		export_builtin(cmd, lockal_env);
 	return (0);
 }
 

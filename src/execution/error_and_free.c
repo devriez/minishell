@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 11:42:50 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/08/30 13:55:45 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/03 14:29:08 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
-void	ft_free_env_list(t_env *head)
+void	free_env_list(t_env *head)
 {
 	t_env	*current;
 	t_env	*next_node;
