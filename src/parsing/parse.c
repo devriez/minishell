@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 10:46:56 by johartma          #+#    #+#             */
-/*   Updated: 2025/09/02 15:13:46 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/03 19:28:56 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include <linux/limits.h>
 
-int	create_tempfile(void)
+static int	create_tempfile(void)
 {
 	char	*dir;
 	char	templ[PATH_MAX];
@@ -37,12 +37,17 @@ int	create_tempfile(void)
 	return (fd);
 }
 
+static int	write_to_tempfile(int fd, char *buffer);
+
+static char	*expand_herdoc(char *buffer, char *delim);
+
 t_redirect	read_heredoc(char *delim, int type)
 {
 	int		fd;
 	char	*tmpfilepath;
 	char	*buffer;
 	char	*read;
+	t_redirect	redirect;
 	
 	// 1. Read lines to read
 	read = 0;
@@ -56,8 +61,9 @@ t_redirect	read_heredoc(char *delim, int type)
 		free(buffer);
 	}
 	// 2. Create Tempfile
-	fd = create_tempfile();
 	
+	fd = create_tempfile();
+	write_to_tempfile(fd, buffer);
 	
 }
 

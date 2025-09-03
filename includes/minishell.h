@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/03 17:45:05 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:07:50 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,9 @@ char	*get_cmd_path(char *cmd_name, char **envp);
 int		execute_internal(t_command *cmd, t_env *lockal_envp);
 bool	is_builtin(char *cmd);
 int		echo_builtin(t_command *cmd);
-int		cd_builtin(t_command *cmd, t_env **lockal_env);
+int		cd_builtin(t_command *cmd, t_env *lockal_env);
 int		pwd_builtin(t_env *lockal_env);
+int		export_builtin(t_command *cmd, t_env *lockal_env);
 
 //env
 //	env_utils
@@ -119,8 +120,8 @@ char	**parse_envv(char *name_eq_value);
 char	*get_env_var(t_env *lockal_env, char *var_name);
 void	sort_env(t_env *local_env);
 //	set_envv
-int		set_env_var_from_pair(t_env **lockal_env, char *name, char *value);
-int		set_env_var_from_str(t_env **lockal_env, char *name_equal_value);
+int		set_envv_from_pair(t_env **lockal_env, char *name, char *value);
+int		set_envv_from_str(t_env **lockal_env, char *name_equal_value);
 //	env_to_list
 t_env	*env_to_list(char **envp);
 
@@ -128,7 +129,7 @@ t_env	*env_to_list(char **envp);
 
 
 //error_and_free
-void	ft_free_env_list(t_env *head);
+void	free_env_list(t_env *head);
 
 //delete !!!!!!11
 t_command	*johannes_func(char	*line);

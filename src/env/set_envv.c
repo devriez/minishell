@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 19:11:40 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/02 18:19:36 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/03 14:51:55 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	rewrite_env_var(t_env *lockal_env, char *var_name, char *var_value)
 	return (1);
 }
 
-int	set_env_var_from_pair(t_env **lockal_env, char *var_name, char *var_value)
+int	set_envv_from_pair(t_env **lockal_env, char *var_name, char *var_value)
 {
 	t_env	*new_node;
 
@@ -97,7 +97,20 @@ int	set_env_var_from_pair(t_env **lockal_env, char *var_name, char *var_value)
 	}
 }
 
-int	set_env_var_from_str(t_env **lockal_env, char *name_equal_value)
+int	set_envv_from_str(t_env **lockal_env, char *name_equal_value)
 {
-//write a body of this function
+	char	**arr_name_value;
+	int		status;
+
+	arr_name_value = NULL;
+	arr_name_value = parse_envv(name_equal_value);
+	if (arr_name_value == NULL)
+		return (1);
+	status = set_envv_from_pair(lockal_env, \
+								arr_name_value[0], \
+								arr_name_value[1]);
+	free(arr_name_value[0]);
+	free(arr_name_value[1]);
+	free(arr_name_value);
+	return (status);
 }
