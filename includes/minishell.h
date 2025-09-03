@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/03 15:03:57 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:20:32 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef enum e_redirect_type {
 typedef struct s_redirect {
 	t_redirect_type		type;
 	char				*file;
+	int					heredoc_fd;
 	struct s_redirect	*next;
 }	t_redirect;
 
