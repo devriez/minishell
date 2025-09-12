@@ -6,7 +6,7 @@
 /*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:56:18 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/28 14:35:28 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/11 21:42:12 by devriez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdio.h>
 
 typedef struct s_list
 {
@@ -67,5 +68,6 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strndup(const char *s1, size_t n);
+int		ft_isspace(char c);
 
 #endif

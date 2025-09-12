@@ -3,22 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/03 15:43:24 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/11 21:36:31 by devriez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "minishell.h"
 
-void	update_cd_env(t_env **lockal_envp, char *old_pwd_val, char *path)
+static int	update_pwd_and_oldpwd(t_env **local_env, char *path)
 {
-	set_env_var(lockal_envp, "OLDPWD", old_pwd_val);
-	set_env_var(lockal_envp, "PWD", path);
+	char	*pwd_val;
+
+	pwd_val = ft_strdup(get_env_var_val(*local_env, "PWD"));
+	if (!pwd_val)
+	{
+		printf("cd: PWD not set\n");
+		return (1);
+	}
+	if (set_envv_from_pair(local_env, "OLDPWD", pwd_val) == 1)
+	{
+		printf("cd: error in set OLDPWD\n");
+		return (1);
+	}
+	if (set_envv_from_pair(local_env, "PWD", path) == 1)
+	{
+		printf("cd: error in set PWD\n");
+		return (1);
+	}
+	free(pwd_val);
+	return (0);
 }
 
-char	*get_cd_path(t_command *cmd, t_env *lockal_envp)
+static char	*get_cd_path(t_command *cmd, t_env *local_env)
 {
 	char	*input;
 	char	*path;
@@ -28,15 +46,15 @@ char	*get_cd_path(t_command *cmd, t_env *lockal_envp)
 		input = cmd->args[0];
 	if (!input || ft_strcmp(input, "~") == 0)
 	{
-		path = get_env_var(lockal_envp, "HOME");
+		path = ft_strdup(get_env_var_val(local_env, "HOME"));
 		if (!path)
-			return (printf("minishell: cd: HOME not set\n"), NULL);
+			return (printf("cd: HOME not set\n"), NULL);
 	}
 	else if (ft_strcmp(input, "-") == 0)
 	{
-		path = get_env_var(lockal_envp, "OLDPWD");
+		path = ft_strdup(get_env_var_val(local_env, "OLDPWD"));
 		if (!path)
-			return (printf("minishell: cd: OLDPWD not set\n"), NULL);
+			return (printf("cd: OLDPWD not set\n"), NULL);
 		printf("%s\n", path);
 	}
 	else
@@ -44,21 +62,17 @@ char	*get_cd_path(t_command *cmd, t_env *lockal_envp)
 	return (path);
 }
 
-int	cd_builtin(t_command *cmd, t_env **lockal_envp)
+int	cd_builtin(t_command *cmd, t_env *local_env)
 {
 	char	*path;
-	char	*old_pwd_val;
 
-	path = get_cd_path(cmd, *lockal_envp);
+	path = get_cd_path(cmd, local_env);
 	if (!path)
 		return (1);
 	if (chdir(path) == -1)
-		return (free(path), perror("minishell: cd"), 1);
-	old_pwd_val = get_env_var(*lockal_envp, "PWD");
-	if (!old_pwd_val)
-		return (printf("minishell: cd: PWD not set\n"), 1);
-	update_cd_env(lockal_envp, old_pwd_val, path);
+		return (free(path), perror("minishell: cd:"), 1);
+	if (update_pwd_and_oldpwd(&local_env, path) == 1)
+		return (1);
 	free(path);
-	free(old_pwd_val);
 	return (0);
 }

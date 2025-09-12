@@ -1,28 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_to_list.c                                      :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/04 19:50:06 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/03 17:38:20 by amoiseik         ###   ########.fr       */
+/*   Created: 2025/09/11 13:10:19 by devriez           #+#    #+#             */
+/*   Updated: 2025/09/11 13:12:13 by devriez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_env	*env_to_list(char **envp)
+int	ft_isspace(char c)
 {
-	int		i;
-	t_env	*lockal_env;
-
-	lockal_env = NULL;
-	i = 0;
-	while (envp[i])
-	{
-		set_envv_from_str(&lockal_env, envp[i]);
-		i ++;
-	}
-	return (lockal_env);
+	if (c == ' ' || c == '\t' || c == '\n'
+		|| c == '\v' || c == '\f' || c == '\r')
+		return (1);
+	else
+		return (0);
 }

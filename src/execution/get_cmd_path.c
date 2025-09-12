@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd_path.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 19:46:09 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/03 19:46:58 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/11 21:28:14 by devriez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_path_from_env(t_env *lockal_env)
+static char	*get_path_from_env(t_env *local_env)
 {
 	t_env	*env_var;
 
-	env_var = lockal_env;
+	env_var = local_env;
 	while (env_var)
 	{
 		if (ft_strcmp(env_var->name, "PATH") == 0)
@@ -26,7 +26,7 @@ char	*get_path_from_env(t_env *lockal_env)
 	return (NULL);
 }
 
-char	*join_path(const char *path, const char *filename)
+static char	*join_path(const char *path, const char *filename)
 {
 	char	*temp;
 	char	*full_path;
@@ -46,7 +46,7 @@ char	*join_path(const char *path, const char *filename)
 	return (full_path);
 }
 
-char	*get_cmd_path(char *cmd_name, t_env *lockal_env)
+char	*get_cmd_path(char *cmd_name, t_env *local_env)
 {
 	char	*paths_str;
 	char	**paths_arr;
@@ -54,9 +54,11 @@ char	*get_cmd_path(char *cmd_name, t_env *lockal_env)
 	int		i;
 
 	i = 0;
-	paths_str = get_path_from_env(lockal_env);
+	paths_str = get_path_from_env(local_env);
+	if (!paths_str)
+		return NULL;
 	paths_arr = ft_split(paths_str, ':');
-	if (!paths_str || !paths_arr)
+	if (!paths_arr)
 		return (NULL);
 	while (paths_arr[i])
 	{

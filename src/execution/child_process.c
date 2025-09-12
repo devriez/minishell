@@ -3,42 +3,72 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:20:57 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/03 20:00:17 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/11 21:22:58 by devriez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	execute_external(t_command *cmd, t_env *lockal_env)
+void child_setup(int fd_in, int fd_out)
+{
+	if (fd_in != STDIN_FILENO)
+	{
+		dup2(fd_in, STDIN_FILENO);
+		close(fd_in);
+	}
+	if (fd_out != STDOUT_FILENO)
+	{
+		dup2(fd_out, STDOUT_FILENO);
+		close(fd_out);
+	}
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
+
+static int	execute_external(t_command *cmd, t_env *local_env)
 {
 	char	*cmd_path;
+	char	**cmd_with_args;
+	char	**envp;
 
-	cmd_path = get_cmd_path(cmd->name, lockal_env);
+	cmd_path = get_cmd_path(cmd->name, local_env);
 	if (!cmd_path)
-	{
-		printf("Command '%s' is not executable", cmd->name);
-		return (1);
-	}
-	if (execve(cmd_path, cmd, envv) == -1) //thinking here
+		return (printf("Command '%s' is not executable\n", cmd->name), 127);
+	cmd_with_args = join_str_with_arr(cmd->name, cmd->args);
+	envp = env_to_char_array(local_env);
+	if (!cmd_with_args || !envp)
 	{
 		free(cmd_path);
-		printf("Error with execve");
-		return (1);
+		free_arr(cmd_with_args);
+		free_arr(envp);
+		return (printf("Error with memore allocation\n"), 1);
+	}
+	if (execve(cmd_path, cmd_with_args, envp) == -1)
+	{
+		free(cmd_path);
+		free_arr(cmd_with_args);
+		free_arr(envp);
+		return (printf("Error with execve\n"), 126);
 	}
 	return (0);
 }
 
-int	child_process(t_command *cmd, t_env *lockal_env)
+int	child_process(t_command *cmd, t_env *local_env)
 {
 	int		exit_status;
 
+	if (cmd->redirections)
+	{
+		if (handle_redirect(cmd->redirections) == 1)
+			exit(1);
+	}
 	if (is_builtin(cmd->name))
-		exit_status = execute_builtin(cmd, lockal_env);
+		exit_status = execute_builtin(cmd, local_env);
 	else
-		exit_status = execute_external(cmd, lockal_env);
+		exit_status = execute_external(cmd, local_env);
 	return (exit_status);
 }
 

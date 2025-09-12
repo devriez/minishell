@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 19:08:36 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/03 17:30:03 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/11 20:53:12 by devriez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_n_flag(char *flag)
+static bool	is_n_flag(char *flag)
 {
 	if (!flag || *flag != '-')
 		return (false);
@@ -27,7 +27,7 @@ bool	is_n_flag(char *flag)
 		return (false);
 }
 
-bool	is_empty_flag(char *flag)
+static bool	is_empty_flag(char *flag)
 {
 	if (!flag || *flag != '-')
 		return (false);
@@ -37,30 +37,46 @@ bool	is_empty_flag(char *flag)
 	return (false);
 }
 
-int	echo_builtin(t_command *cmd)
+static void	print_arg(t_env *env, char *arg)
+{
+	char	*val;
+
+	if (arg[0] == '$')
+	{
+		val = get_env_var_val(env, arg + 1);
+		if (val)
+			printf("%s", val);
+	}
+	else
+		printf("%s", arg);
+}
+
+int	echo_builtin(t_command *cmd, t_env *env)
 {
 	int		i;
-	bool	n_flag_found;
+	bool	n_flag;
 
 	i = 0;
-	n_flag_found = false;
-	if (!cmd->args)
-		return (printf("\n"), 0);
+	n_flag = false;
+	if (!cmd->args || !cmd->args[0])
+	{
+		printf("\n");
+		return (0);
+	}
 	while (cmd->args[i] && is_n_flag(cmd->args[i]))
 	{
-		n_flag_found = true;
-		i ++;
+		n_flag = true;
+		i++;
 	}
-	if (is_empty_flag(cmd->args[i]))
-		i ++;
 	while (cmd->args[i])
 	{
-		printf("%s", cmd->args[i]);
+		print_arg(env, cmd->args[i]);
 		if (cmd->args[i + 1])
 			printf(" ");
-		i ++;
+		i++;
 	}
-	if (n_flag_found != true)
+	if (!n_flag)
 		printf("\n");
 	return (0);
 }
+
