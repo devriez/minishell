@@ -98,6 +98,7 @@ typedef struct s_tokens {
 # include <fcntl.h> // open() - flags
 
 extern int	g_last_exit_status;
+extern int	g_should_exit;
 
 //execution
 // child_process.c

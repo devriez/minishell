@@ -24,7 +24,7 @@ void	execute_cmd(t_command *cmd, t_env *local_env)
 		handle_single_cmd(cmd, local_env);
 }
 
-static int	g_should_exit = 0;
+int	g_should_exit = 0;
 
 t_command	*read_and_parse(t_env *local_env)
 {
@@ -67,7 +67,9 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		execute_cmd(cmd, local_env);
 		free_command(cmd);
+		if (g_should_exit)
+			break ;
 	}
 	free_env_list(local_env);
-	return (0);
+	return (g_last_exit_status);
 }

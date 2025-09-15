@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 13:26:26 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/11 21:20:10 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/15 20:01:30 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ int	exit_builtin(t_command *cmd)
 	{
 		printf("exit: too many arguments\n");
 		exit_status = 1;
-		return (exit_status);
+		g_last_exit_status = exit_status;
+		g_should_exit = 1;
+		return (exit_status);  // Return actual exit code
 	}
 	else if (!is_numeric(cmd->args[1]))
 	{
@@ -71,5 +73,7 @@ int	exit_builtin(t_command *cmd)
 	}
 	else
 		exit_status = (unsigned char)ft_atoi_long(cmd->args[1]) % 256;
-	exit(exit_status);
+	g_last_exit_status = exit_status;
+	g_should_exit = 1;
+	return (exit_status);  // Return actual exit code, not special signal
 }

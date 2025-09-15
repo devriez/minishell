@@ -101,6 +101,11 @@ void	handle_single_cmd(t_command *cmd, t_env *local_env)
 			}
 		}
 		g_last_exit_status = execute_builtin(cmd, local_env);
+		if (g_last_exit_status == -1)  // Exit signal
+		{
+			g_should_exit = 1;
+			// g_last_exit_status already contains the correct exit code
+		}
 		if (cmd->redirections)
 			restore_parent_io(saved_stdin, saved_stdout);
 	}
