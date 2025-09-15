@@ -40,7 +40,7 @@ typedef enum e_word_flags {
 	Q_EXPD = 1 << 3
 }	t_word_flags;
 
-typedef struct s_redirect {
+typedef struct	s_redirect {
 	t_redirect_type		type;
 	char				*file;
 	int					heredoc_fd;
@@ -54,7 +54,7 @@ typedef struct s_command {
 	struct s_command	*next;
 }	t_command;
 
-typedef struct s_env {
+typedef struct	s_env {
 	char			*name;
 	char			*value;
 	struct s_env	*next;
@@ -87,60 +87,70 @@ typedef struct s_tokens {
 	t_meta			meta;
 }	t_tokens;
 
-
 # include "libft.h" // libft
-# include <unistd.h> // dup2, fork, chdir
+# include <unistd.h> // dup2, fork, chdir, open, close
 # include <sys/types.h> // fork(pid_t)
 # include <stdio.h> // printf
 # include <stdlib.h> // exit
 # include <signal.h> // signal
 # include <readline/readline.h> // readline
 # include <readline/history.h> // add_history
-# include <stdbool.h> // type bool
-# include <stddef.h> // size_t
+# include <fcntl.h> // open() - flags
 
-extern int g_last_exit_status;
+extern int	g_last_exit_status;
 
+//execution
+// child_process.c
+void	child_setup(int fd_in, int fd_out);
+int		child_process(t_command *cmd, t_env *local_env);
+//error_and_free
+void	free_arr(char **arr);
+void	free_env_list(t_env *head);
+void	free_command(t_command *head);
+//	execution.c
+void	handle_single_cmd(t_command *cmd, t_env *local_env);
+void	handle_multiply_cmds(t_command *cmd, t_env *local_env);
+//	get_cmd_path.c
+char	*get_cmd_path(char *cmd_name, t_env *local_env);
+//handle_redirect.c
+int		handle_redirect(t_redirect *redirectoins);
+int		redirect_in_parent(t_redirect *redir, int *saved_stdin, int *saved_stdout);
+void	restore_parent_io(int saved_stdin, int saved_stdout);
 //utils.c
 void	handle_signal(int signum);
-
-//get_cmd_path.c
-char	*get_cmd_path(char *cmd_name, char **envp);
+char	**join_str_with_arr(char *str, char **arr);
 
 //buildins
-int		execute_internal(t_command *cmd, t_env *lockal_envp);
+int		cd_builtin(t_command *cmd, t_env *local_env);
+int		echo_builtin(t_command *cmd, t_env *env);
+int		env_builtin(t_command *cmd, t_env *local_env);
+int		execute_builtin(t_command *cmd, t_env *local_env);
 bool	is_builtin(char *cmd);
-int		echo_builtin(t_command *cmd);
-int		cd_builtin(t_command *cmd, t_env *lockal_env);
-int		pwd_builtin(t_env *lockal_env);
-int		export_builtin(t_command *cmd, t_env *lockal_env);
+int		exit_builtin(t_command *cmd);
+int		export_builtin(t_command *cmd, t_env *local_env);
+int		pwd_builtin(t_env *local_env);
+int		unset_builtin(t_command *cmd, t_env **local_env);
 
 //env
+// convert_env
+t_env	*env_to_list(char **envp);
+char	**env_to_char_array(t_env *env_list);
 //	env_utils
 bool	is_correct_varname(char *name);
-bool	is_env_var_exist(t_env *lockal_env, char *var_name);
+bool	is_env_var_exist(t_env *local_env, char *var_name);
 char	**parse_envv(char *name_eq_value);
-//	get_and_sort
-char	*get_env_var(t_env *lockal_env, char *var_name);
 void	sort_env(t_env *local_env);
+void	free_node(t_env *node);
+//	get_and_del
+char	*get_env_var_val(t_env *local_env, char *var_name);
+void	remove_envv(t_env **local_env, char *var_name);
 //	set_envv
-int		set_envv_from_pair(t_env **lockal_env, char *name, char *value);
-int		set_envv_from_str(t_env **lockal_env, char *name_equal_value);
-//	env_to_list
-t_env	*env_to_list(char **envp);
-
-
-
-
-//error_and_free
-void	free_env_list(t_env *head);
+int		set_envv_from_pair(t_env **local_env, char *name, char *value);
+int		set_envv_from_str(t_env **local_env, char *name_equal_value);
 
 //parser
 t_command	*parse_command_line(char *line);
-
-char	**lex(char const *s);
-
+char		**lex(char const *s);
 t_tokens	*get_type(char **lexed, t_tokens **tokens);
-
 
 #endif

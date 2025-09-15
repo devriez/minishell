@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+         #
+#    By: devriez <devriez@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/18 12:43:17 by devriez           #+#    #+#              #
-#    Updated: 2025/05/20 16:08:14 by amoiseik         ###   ########.fr        #
+#    Updated: 2025/09/11 13:12:41 by devriez          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRCS = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
 		ft_putstr_fd.c ft_split.c ft_strchr.c ft_strdup.c ft_striteri.c \
 		ft_strjoin.c ft_strlcat.c ft_strlcpy.c ft_strlen.c ft_strmapi.c \
 		ft_strncmp.c ft_strnstr.c ft_strrchr.c ft_strtrim.c ft_substr.c \
-		ft_tolower.c ft_toupper.c
+		ft_tolower.c ft_toupper.c ft_strcmp.c ft_strndup.c ft_isspace.c
 SRCS_B = ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back.c \
 			ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c
 

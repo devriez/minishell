@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 19:14:26 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/11 12:57:00 by devriez          ###   ########.fr       */
+/*   Created: 2025/08/26 15:20:31 by devriez           #+#    #+#             */
+/*   Updated: 2025/08/26 15:20:38 by devriez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	pwd_builtin(t_env *local_env)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	char	*working_dir;
+	size_t	i;
 
-	working_dir = ft_strdup(get_env_var_val(local_env, "PWD"));
-	if (!working_dir)
-	{
-		printf("minishell: pwd: PWD not set\n");
+	i = 0;
+	if (!s1 || !s2)
 		return (1);
-	}
-	printf("%s\n", working_dir);
-	free(working_dir);
-	return (0);
+	while (s1[i] && s2[i] && (s1[i] == s2[i]))
+		i++;
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

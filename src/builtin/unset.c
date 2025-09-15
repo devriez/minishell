@@ -1,44 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/29 18:04:06 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/11 21:20:22 by devriez          ###   ########.fr       */
+/*   Created: 2025/09/10 14:45:07 by devriez           #+#    #+#             */
+/*   Updated: 2025/09/11 13:17:43 by devriez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_local_env(t_env *local_env)
+int	unset_builtin(t_command *cmd, t_env **local_env)
 {
-	sort_env(local_env);
-	while (local_env)
-	{
-		printf("declare -x %s=%s\n", local_env->name, local_env->value);
-		local_env = local_env->next;
-	}
-}
+	char	*var_name;
+	int		exit_status;
+	int		i;
 
-int	export_builtin(t_command *cmd, t_env *local_env)
-{
-	int	status;
-	int	i;
-
-	status = 0;
 	if (!cmd->args || !cmd->args[0])
-		print_local_env(local_env);
-	else
+		return (0);
+	exit_status = 0;
+	i = 0;
+	while (cmd->args[i])
 	{
-		i = 0;
-		while (cmd->args[i])
-		{
-			if (set_envv_from_str(&local_env, cmd->args[i]))
-				status = 1;
-			i++;
-		}
+		var_name = cmd->args[i];
+		if (is_correct_varname(var_name))
+			remove_envv(local_env, var_name);
+		else
+			exit_status = 1;
+		i ++;
 	}
-	return (status);
+	return (exit_status);
 }

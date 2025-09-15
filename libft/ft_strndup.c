@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 19:14:26 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/11 12:57:00 by devriez          ###   ########.fr       */
+/*   Created: 2025/08/28 14:33:38 by devriez           #+#    #+#             */
+/*   Updated: 2025/08/28 14:42:35 by devriez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	pwd_builtin(t_env *local_env)
+char *ft_strndup(const char *s1, size_t n)
 {
-	char	*working_dir;
+	char *dup;
+	size_t len;
 
-	working_dir = ft_strdup(get_env_var_val(local_env, "PWD"));
-	if (!working_dir)
-	{
-		printf("minishell: pwd: PWD not set\n");
-		return (1);
-	}
-	printf("%s\n", working_dir);
-	free(working_dir);
-	return (0);
+	len = ft_strlen(s1);
+	if (len > n)
+		len = n;
+	dup = (char *)malloc(sizeof(char) * (len + 1));
+	if (!dup)
+		return NULL;
+	ft_memcpy(dup, s1, len);
+	dup[len] = '\0';
+	return (dup);
 }

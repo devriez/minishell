@@ -1,2 +1,7 @@
+# Project files
 about/
 
+# IDE and system files
+.DS_Store
+a.out
+.vscode/
