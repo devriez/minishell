@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 00:00:00 by johartma          #+#    #+#             */
-/*   Updated: 2025/09/15 19:35:17 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/15 19:43:53 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static char	*get_var_value(char *var_name, t_env *env)
 	value = get_env_var_val(env, var_name);
 	if (!value)
 		return (ft_strdup(""));
-	return (value);
+	return (ft_strdup(value));
 }
 
 static char	*extract_var_name(char *str, size_t *len)

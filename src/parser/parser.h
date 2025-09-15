@@ -31,6 +31,6 @@ t_redirect	*parse_redirections(t_tokens *tokens, size_t start, size_t end);
 size_t		*find_pipe_positions(t_tokens *tokens, size_t count, size_t *pipe_count);
 
 /* Main entry point - complete parsing pipeline (defined in separate module) */
-t_command	*parse_command_line(char *line);
+t_command	*parse_command_line(char *line, t_env *env);
 
 #endif

@@ -41,7 +41,7 @@ static void	free_typed_tokens(t_tokens *tokens, size_t count)
 	free(tokens);
 }
 
-t_command	*parse_command_line(char *line)
+t_command	*parse_command_line(char *line, t_env *env)
 {
 	char		**lexed;
 	t_tokens	*tokens;
@@ -58,12 +58,12 @@ t_command	*parse_command_line(char *line)
 	free(lexed);  // Only free the array, not the strings (now owned by tokens)
 	if (!tokens)
 		return (NULL);
-	if (expand_tokens(tokens, token_count, NULL) != 0)
+	if (expand_tokens(tokens, token_count, env) != 0)
 	{
 		free_typed_tokens(tokens, token_count);
 		return (NULL);
 	}
-	commands = parse_tokens_to_commands(tokens, token_count, NULL);
+	commands = parse_tokens_to_commands(tokens, token_count, env);
 	free_typed_tokens(tokens, token_count);
 	return (commands);
 }

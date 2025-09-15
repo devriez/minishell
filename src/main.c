@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/15 19:35:17 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/15 19:43:53 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	execute_cmd(t_command *cmd, t_env *local_env)
 
 static int	g_should_exit = 0;
 
-t_command	*read_and_parse(void)
+t_command	*read_and_parse(t_env *local_env)
 {
 	char		*line;
 	t_command	*cmd;
@@ -43,7 +43,7 @@ t_command	*read_and_parse(void)
 		free(line);
 		return (NULL);
 	}
-	cmd = parse_command_line(line);
+	cmd = parse_command_line(line, local_env);
 	free(line);
 	return (cmd);
 }
@@ -60,7 +60,7 @@ int	main(int argc, char **argv, char **envp)
 	local_env = env_to_list(envp);
 	while (1)
 	{
-		cmd = read_and_parse();
+		cmd = read_and_parse(local_env);
 		if (g_should_exit)
 			break ;
 		if (!cmd)

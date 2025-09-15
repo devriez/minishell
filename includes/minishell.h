@@ -149,7 +149,7 @@ int		set_envv_from_pair(t_env **local_env, char *name, char *value);
 int		set_envv_from_str(t_env **local_env, char *name_equal_value);
 
 //parser
-t_command	*parse_command_line(char *line);
+t_command	*parse_command_line(char *line, t_env *env);
 char		**lex(char const *s);
 t_tokens	*get_type(char **lexed, t_tokens **tokens);
 
