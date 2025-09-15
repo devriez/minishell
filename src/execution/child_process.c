@@ -37,19 +37,17 @@ static int	execute_external(t_command *cmd, t_env *local_env)
 	cmd_path = get_cmd_path(cmd->name, local_env);
 	if (!cmd_path)
 		return (printf("Command '%s' is not executable\n", cmd->name), 127);
-	cmd_with_args = join_str_with_arr(cmd->name, cmd->args);
+	cmd_with_args = cmd->args;
 	envp = env_to_char_array(local_env);
 	if (!cmd_with_args || !envp)
 	{
 		free(cmd_path);
-		free_arr(cmd_with_args);
 		free_arr(envp);
 		return (printf("Error with memore allocation\n"), 1);
 	}
 	if (execve(cmd_path, cmd_with_args, envp) == -1)
 	{
 		free(cmd_path);
-		free_arr(cmd_with_args);
 		free_arr(envp);
 		return (printf("Error with execve\n"), 126);
 	}

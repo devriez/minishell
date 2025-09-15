@@ -53,6 +53,14 @@ char	*get_cmd_path(char *cmd_name, t_env *local_env)
 	char	*full_path;
 	int		i;
 
+	// Check if it's an absolute path or contains '/'
+	if (cmd_name[0] == '/' || ft_strchr(cmd_name, '/'))
+	{
+		if (access(cmd_name, X_OK) == 0)
+			return (ft_strdup(cmd_name));
+		return (NULL);
+	}
+	
 	i = 0;
 	paths_str = get_path_from_env(local_env);
 	if (!paths_str)

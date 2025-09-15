@@ -16,9 +16,9 @@ int	env_builtin(t_command *cmd, t_env *local_env)
 {
 	t_env	*env_node;
 
-	if (cmd->args && cmd->args[0])
+	if (cmd->args && cmd->args[1])
 	{
-		printf("env: %s: No such file or directory\n", cmd->args[0]);
+		printf("env: %s: No such file or directory\n", cmd->args[1]);
 		return (127);
 	}
 	env_node = local_env;
