@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/15 20:29:16 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/15 20:34:39 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ t_command	*read_and_parse(t_env *local_env)
 		free(line);
 		return (NULL);
 	}
+	add_history(line);  // Add to history
 	cmd = parse_command_line(line, local_env);
 	free(line);
 	return (cmd);
