@@ -27,15 +27,6 @@ static bool	is_n_flag(char *flag)
 		return (false);
 }
 
-static bool	is_empty_flag(char *flag)
-{
-	if (!flag || *flag != '-')
-		return (false);
-	flag ++;
-	if (*flag == '\0')
-		return (true);
-	return (false);
-}
 
 static void	print_arg(t_env *env, char *arg)
 {

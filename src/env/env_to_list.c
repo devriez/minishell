@@ -16,7 +16,6 @@ t_env	*env_to_list(char **envp)
 {
 	int		i;
 	t_env	*lockal_env;
-	char	**name_value;
 
 	lockal_env = NULL;
 	i = 0;

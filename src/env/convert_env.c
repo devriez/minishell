@@ -12,20 +12,6 @@
 
 #include "minishell.h"
 
-t_env	*env_to_list(char **envp)
-{
-	int		i;
-	t_env	*local_env;
-
-	local_env = NULL;
-	i = 0;
-	while (envp[i])
-	{
-		set_envv_from_str(&local_env, envp[i]);
-		i++;
-	}
-	return (local_env);
-}
 
 static int	count_env_vars(t_env *env_list)
 {

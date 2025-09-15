@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <sys/wait.h>
 
 static int	fork_and_execute(t_command *cmd, t_env *local_env, int fd_in, int fd_out)
 {

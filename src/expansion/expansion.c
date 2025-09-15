@@ -48,7 +48,7 @@ static char	*get_var_value(char *var_name, t_env *env)
 	{
 		return (ft_itoa(g_last_exit_status));
 	}
-	value = get_env_var(env, var_name);
+	value = get_env_var_val(env, var_name);
 	if (!value)
 		return (ft_strdup(""));
 	return (value);

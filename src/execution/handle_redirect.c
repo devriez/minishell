@@ -61,8 +61,6 @@ static int	handle_output_append(t_redirect *redir)
 int	handle_redirect(t_redirect *redirections)
 {
 	t_redirect	*redir;
-	int			file_d_in;
-	int			file_d_out;
 	int			status;
 
 	redir = redirections;
