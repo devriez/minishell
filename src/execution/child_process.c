@@ -14,6 +14,7 @@
 
 void child_setup(int fd_in, int fd_out)
 {
+	setpgid(0, 0);  // Put child in its own process group
 	if (fd_in != STDIN_FILENO)
 	{
 		dup2(fd_in, STDIN_FILENO);

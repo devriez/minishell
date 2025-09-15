@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 20:38:48 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/15 20:21:57 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/15 20:29:16 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	handle_signal(int signum)
 	if (signum == SIGINT)
 	{
 		g_last_exit_status = 130;  // Standard exit code for SIGINT
-		write(STDOUT_FILENO, "\n", 1);  // Use write instead of printf for signal safety
+		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
