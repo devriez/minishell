@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 00:00:00 by johartma          #+#    #+#             */
-/*   Updated: 2025/09/15 19:16:51 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/15 19:35:17 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ int	expand_tokens(t_tokens *tokens, size_t token_count, t_env *env)
 	char	*expanded_text;
 	char	*old_text;
 
-	if (!tokens || !env)
+	if (!tokens)
 		return (1);
 	i = 0;
 	while (i < token_count)

@@ -25,20 +25,6 @@ static size_t	count_tokens_from_lexed(char **lexed)
 	return (count);
 }
 
-static void	free_lexed_tokens(char **lexed)
-{
-	size_t	i;
-
-	if (!lexed)
-		return ;
-	i = 0;
-	while (lexed[i])
-	{
-		free(lexed[i]);
-		i++;
-	}
-	free(lexed);
-}
 
 static void	free_typed_tokens(t_tokens *tokens, size_t count)
 {
@@ -61,7 +47,6 @@ t_command	*parse_command_line(char *line)
 	t_tokens	*tokens;
 	t_command	*commands;
 	size_t		token_count;
-	t_env		*dummy_env;
 
 	if (!line || !*line)
 		return (NULL);
@@ -70,16 +55,15 @@ t_command	*parse_command_line(char *line)
 		return (NULL);
 	token_count = count_tokens_from_lexed(lexed);
 	tokens = get_type(lexed, &tokens);
-	free_lexed_tokens(lexed);
+	free(lexed);  // Only free the array, not the strings (now owned by tokens)
 	if (!tokens)
 		return (NULL);
-	dummy_env = NULL;
-	if (expand_tokens(tokens, token_count, dummy_env) != 0)
+	if (expand_tokens(tokens, token_count, NULL) != 0)
 	{
 		free_typed_tokens(tokens, token_count);
 		return (NULL);
 	}
-	commands = parse_tokens_to_commands(tokens, token_count, dummy_env);
+	commands = parse_tokens_to_commands(tokens, token_count, NULL);
 	free_typed_tokens(tokens, token_count);
 	return (commands);
 }
