@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 21:46:13 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/15 20:07:17 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/15 20:21:57 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,15 @@ static int	fork_and_execute(t_command *cmd, t_env *local_env, int fd_in, int fd_
 	int status;
 	int exit_status;
 
-	signal(SIGINT, SIG_IGN);  // Ignore SIGINT in parent during execution
 	pid = fork();
 	if (pid == -1)
-	{
-		signal(SIGINT, handle_signal);  // Restore signal handler
 		return (printf("Error with forking\n"), 1);
-	}
 	if (pid == 0)
 	{
 		child_setup(fd_in, fd_out);
 		exit(child_process(cmd, local_env));
 	}
 	waitpid(pid, &status, 0);
-	signal(SIGINT, handle_signal);  // Restore signal handler
 	if (WIFEXITED(status))
 		exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
@@ -74,6 +69,7 @@ void	handle_multiply_cmds(t_command *cmd, t_env *local_env)
 	int			fd_in;
 	int			pipe_fd[2];
 
+	signal(SIGINT, SIG_IGN);  // Ignore SIGINT during pipeline execution
 	fd_in = -1;
 	current = cmd;
 	while (current)
@@ -88,6 +84,7 @@ void	handle_multiply_cmds(t_command *cmd, t_env *local_env)
 			fd_in = pipe_fd[0];
 		current = current->next;
 	}
+	signal(SIGINT, handle_signal);  // Restore signal handler
 }
 
 void	handle_single_cmd(t_command *cmd, t_env *local_env)
@@ -112,7 +109,11 @@ void	handle_single_cmd(t_command *cmd, t_env *local_env)
 			restore_parent_io(saved_stdin, saved_stdout);
 	}
 	else
+	{
+		signal(SIGINT, SIG_IGN);  // Ignore SIGINT during single command execution
 		g_last_exit_status = fork_and_execute(cmd, local_env, \
 												STDIN_FILENO, \
 												STDOUT_FILENO);
+		signal(SIGINT, handle_signal);  // Restore signal handler
+	}
 }
