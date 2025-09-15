@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 21:46:13 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/15 19:35:17 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/15 20:07:17 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,24 @@ static int	fork_and_execute(t_command *cmd, t_env *local_env, int fd_in, int fd_
 	int status;
 	int exit_status;
 
+	signal(SIGINT, SIG_IGN);  // Ignore SIGINT in parent during execution
 	pid = fork();
 	if (pid == -1)
+	{
+		signal(SIGINT, handle_signal);  // Restore signal handler
 		return (printf("Error with forking\n"), 1);
+	}
 	if (pid == 0)
 	{
 		child_setup(fd_in, fd_out);
 		exit(child_process(cmd, local_env));
 	}
 	waitpid(pid, &status, 0);
+	signal(SIGINT, handle_signal);  // Restore signal handler
 	if (WIFEXITED(status))
 		exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		exit_status = 128 + WTERMSIG(status);  // Standard convention for signal exit codes
 	else
 		exit_status = 1;
 	return (exit_status);
@@ -101,11 +108,6 @@ void	handle_single_cmd(t_command *cmd, t_env *local_env)
 			}
 		}
 		g_last_exit_status = execute_builtin(cmd, local_env);
-		if (g_last_exit_status == -1)  // Exit signal
-		{
-			g_should_exit = 1;
-			// g_last_exit_status already contains the correct exit code
-		}
 		if (cmd->redirections)
 			restore_parent_io(saved_stdin, saved_stdout);
 	}

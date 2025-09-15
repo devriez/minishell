@@ -14,11 +14,14 @@
 
 void	handle_signal(int signum)
 {
-	(void)signum;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if (signum == SIGINT)
+	{
+		g_last_exit_status = 130;  // Standard exit code for SIGINT
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 char	**join_str_with_arr(char *str, char **arr)
