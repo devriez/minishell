@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
+/*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/03 20:10:16 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/12 14:11:43 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# include <stddef.h> // size_t
+# include <stdbool.h> // type bool
 
 typedef enum e_redirect_type {
 	INPUT,	   // <
@@ -21,12 +24,12 @@ typedef enum e_redirect_type {
 } t_redirect_type;
 
 typedef enum e_word_type {
-	INPUT,	   // <
-	OUTPUT,	  // >
-	APPEND,	  // >>
-	HEREDOC,	  // <<
-	PIPE,  // |
-	WORD 
+	W_INPUT,	   // <
+	W_OUTPUT,	  // >
+	W_APPEND,	  // >>
+	W_HEREDOC,	  // <<
+	W_PIPE,  // |
+	W_WORD 
 } t_word_type;
 
 typedef enum e_word_flags {
@@ -47,9 +50,8 @@ typedef struct s_redirect {
 typedef struct s_command {
 	char				*name;
 	char				**args;
-	char				*name;
-	t_redirect			*redirections; // Eine Liste von Umleitungen
-	struct s_command	*next;		// Ein Zeiger auf den nächsten Befehl (für Pipes)
+	t_redirect			*redirections;
+	struct s_command	*next;
 }	t_command;
 
 typedef struct s_env {
@@ -95,6 +97,7 @@ typedef struct s_tokens {
 # include <readline/readline.h> // readline
 # include <readline/history.h> // add_history
 # include <stdbool.h> // type bool
+# include <stddef.h> // size_t
 
 extern int g_last_exit_status;
 
@@ -132,8 +135,8 @@ t_env	*env_to_list(char **envp);
 //error_and_free
 void	free_env_list(t_env *head);
 
-//delete !!!!!!11
-t_command	*johannes_func(char	*line);
+//parser
+t_command	*parse_command_line(char *line);
 
 char	**lex(char const *s);
 

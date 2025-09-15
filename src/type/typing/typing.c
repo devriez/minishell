@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "typing.h"
 #include <stdlib.h>
 #include <string.h>
-#include "../libft/libft.h"
+#include "../../../libft/libft.h"
 
 static size_t	get_lislen(char **lexed)
 {
@@ -42,6 +42,19 @@ static void	init_token_meta(t_tokens *token)
 	token->len = ft_strlen(token->text);
 }
 
+static void	mark_heredoc_delimiters(t_tokens *tokens, size_t len)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < len)
+	{
+		if (tokens[i].type == W_HEREDOC && i + 1 < len)
+			tokens[i + 1].meta.is_here_delim = 1;
+		i++;
+	}
+}
+
 t_tokens	*get_type(char **lexed, t_tokens **tokens)
 {
 	size_t	len_tokens;
@@ -65,15 +78,12 @@ t_tokens	*get_type(char **lexed, t_tokens **tokens)
 		else if (strcmp(lexed[i], ">>") == 0)
 			(*tokens)[i].type = W_APPEND;
 		else if (strcmp(lexed[i], "<<") == 0)
-		{
 			(*tokens)[i].type = W_HEREDOC;
-			if (i + 1 < len_tokens)
-				(*tokens)[i + 1].meta.is_here_delim = 1;
-		}
 		else
 			(*tokens)[i].type = W_WORD;
 		i++;
 	}
+	mark_heredoc_delimiters(*tokens, len_tokens);
 	return (*tokens);
 }
 

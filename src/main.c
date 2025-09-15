@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/29 16:24:48 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/12 14:11:43 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	main(int argc, char **argv, char **envp)
 			printf("exit\n");
 			exit(0);
 		}
-		cmd = johannes_func(line);
+		cmd = parse_command_line(line);
 		if (cmd->next)
 			handle_multiply_cmds(cmd, lockal_envp);
 		else
