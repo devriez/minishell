@@ -56,20 +56,20 @@ int	exit_builtin(t_command *cmd)
 {
 	long long int	exit_status;
 	
-	if (!cmd->args || !cmd->args[0])
+	if (!cmd->args || !cmd->args[1])
 		exit_status = 0;
-	else if (cmd->args[1])
+	else if (cmd->args[2])
 	{
 		printf("exit: too many arguments\n");
 		exit_status = 1;
 		return (exit_status);
 	}
-	else if (!is_numeric(cmd->args[0]))
+	else if (!is_numeric(cmd->args[1]))
 	{
-		printf("exit: '%s': numeric argument required\n", cmd->args[0]);
+		printf("exit: '%s': numeric argument required\n", cmd->args[1]);
 		exit_status = 255;
 	}
 	else
-		exit_status = (unsigned char)ft_atoi_long(cmd->args[0]) % 256;
+		exit_status = (unsigned char)ft_atoi_long(cmd->args[1]) % 256;
 	exit(exit_status);
 }

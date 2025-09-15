@@ -18,10 +18,10 @@ int	unset_builtin(t_command *cmd, t_env **local_env)
 	int		exit_status;
 	int		i;
 
-	if (!cmd->args || !cmd->args[0])
+	if (!cmd->args || !cmd->args[1])
 		return (0);
 	exit_status = 0;
-	i = 0;
+	i = 1;  // Start from first argument, skip command name
 	while (cmd->args[i])
 	{
 		var_name = cmd->args[i];

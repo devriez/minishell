@@ -47,9 +47,9 @@ int	echo_builtin(t_command *cmd, t_env *env)
 	int		i;
 	bool	n_flag;
 
-	i = 0;
+	i = 1;  // Start from args[1], skip command name
 	n_flag = false;
-	if (!cmd->args || !cmd->args[0])
+	if (!cmd->args || !cmd->args[1])
 	{
 		printf("\n");
 		return (0);

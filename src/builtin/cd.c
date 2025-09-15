@@ -43,7 +43,7 @@ static char	*get_cd_path(t_command *cmd, t_env *local_env)
 
 	input = NULL;
 	if (cmd->args)
-		input = cmd->args[0];
+		input = cmd->args[1];  // First argument, not command name
 	if (!input || ft_strcmp(input, "~") == 0)
 	{
 		path = ft_strdup(get_env_var_val(local_env, "HOME"));

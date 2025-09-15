@@ -28,11 +28,11 @@ int	export_builtin(t_command *cmd, t_env *local_env)
 	int	i;
 
 	status = 0;
-	if (!cmd->args || !cmd->args[0])
+	if (!cmd->args || !cmd->args[1])
 		print_local_env(local_env);
 	else
 	{
-		i = 0;
+		i = 1;  // Start from first argument, skip command name
 		while (cmd->args[i])
 		{
 			if (set_envv_from_str(&local_env, cmd->args[i]))
