@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/11 14:23:19 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/12 18:32:48 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,8 @@ int	main(int argc, char **argv, char **envp)
 		free_command(cmd);
 	}
 	free_env_list(local_env);
+	rl_clear_history();
+	rl_cleanup_after_signal();
+	clear_history();
 	return (0);
 }

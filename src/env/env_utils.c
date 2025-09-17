@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 13:13:04 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/11 13:45:31 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/12 18:07:06 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool	is_correct_varname(char *name)
 {
 	int	i;
-	
+
 	i = 0;
 	if (!name || !name[i])
 		return (false);

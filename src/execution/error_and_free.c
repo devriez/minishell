@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_and_free.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 11:42:50 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/11 21:27:16 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/12 17:45:33 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ void	free_env_list(t_env *head)
 }
 
 static void	free_redirection(t_redirect *head)
-{	
+{
 	t_redirect	*current;
 	t_redirect	*next;
-	
+
 	if (!head)
 		return ;
 	current = head;
@@ -79,9 +79,9 @@ static void	free_redirection(t_redirect *head)
 
 void	free_command(t_command *head)
 {
-	t_command *current;
-	t_command *next;
-	
+	t_command	*current;
+	t_command	*next;
+
 	if (!head)
 		return ;
 	current = head;

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 17:52:58 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/11 21:29:29 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/12 18:41:05 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 static int	handle_input_heredoc(t_redirect *redir)
 {
@@ -29,7 +29,7 @@ static int	handle_input_heredoc(t_redirect *redir)
 		perror("dup2");
 		if (redir->type == INPUT)
 			close(file_d_in);
-		return 1;
+		return (1);
 	}
 	if (redir->type == INPUT)
 		close(file_d_in);
@@ -39,7 +39,7 @@ static int	handle_input_heredoc(t_redirect *redir)
 static int	handle_output_append(t_redirect *redir)
 {
 	int	file_d_out;
-	
+
 	if (redir->type == OUTPUT)
 		file_d_out = open(redir->file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	else if (redir->type == APPEND)
@@ -52,17 +52,15 @@ static int	handle_output_append(t_redirect *redir)
 	{
 		perror("dup2");
 		close(file_d_out);
-		return 1;
+		return (1);
 	}
 	close(file_d_out);
-	return 0;
+	return (0);
 }
 
 int	handle_redirect(t_redirect *redirections)
 {
 	t_redirect	*redir;
-	int			file_d_in;
-	int			file_d_out;
 	int			status;
 
 	redir = redirections;
@@ -85,7 +83,6 @@ int	redirect_in_parent(t_redirect *redir, int *saved_stdin, int *saved_stdout)
 	*saved_stdout = dup(STDOUT_FILENO);
 	if (*saved_stdin == -1 || *saved_stdout == -1)
 		return (perror("dup"), 1);
-
 	if (handle_redirect(redir) == 1)
 	{
 		dup2(*saved_stdin, STDIN_FILENO);

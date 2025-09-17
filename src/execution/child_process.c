@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:20:57 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/11 21:22:58 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/12 18:06:17 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void child_setup(int fd_in, int fd_out)
+void	child_setup(int fd_in, int fd_out)
 {
 	if (fd_in != STDIN_FILENO)
 	{
@@ -71,4 +71,3 @@ int	child_process(t_command *cmd, t_env *local_env)
 		exit_status = execute_external(cmd, local_env);
 	return (exit_status);
 }
-

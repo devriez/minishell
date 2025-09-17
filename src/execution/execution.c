@@ -3,20 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 21:46:13 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/11 21:27:50 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/12 18:39:31 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	fork_and_execute(t_command *cmd, t_env *local_env, int fd_in, int fd_out)
+static int	fork_and_execute(t_command *cmd, \
+							t_env *local_env, \
+							int fd_in, \
+							int fd_out)
 {
-	pid_t pid;
-	int status;
-	int exit_status;
+	pid_t	pid;
+	int		status;
+	int		exit_status;
 
 	pid = fork();
 	if (pid == -1)
@@ -34,29 +37,36 @@ static int	fork_and_execute(t_command *cmd, t_env *local_env, int fd_in, int fd_
 	return (exit_status);
 }
 
-static int	execute_pipeline_cmd(t_command *cmd, t_env *local_env,
-		int fd_in, int *pipe_fd, int is_last)
+static int	execute_pipeline_cmd(t_command *cmd, \
+									t_env *local_env,
+									int fd_in, \
+									int *pipe_fd)
 {
-	int exit_status;
+	int	exit_status;
 
-	if (!is_last)
+	if (pipe(pipe_fd) == -1)
 	{
-		if (pipe(pipe_fd) == -1)
-		{
-			printf("Error with making pipe\n");
-			if (fd_in != -1)
-				close(fd_in);
-			return (1);
-		}
+		printf("Error with making pipe\n");
+		if (fd_in != -1)
+			close(fd_in);
+		return (1);
 	}
-	if (!is_last)
-		exit_status = fork_and_execute(cmd, local_env, fd_in, pipe_fd[1]);
-	else
-		exit_status = fork_and_execute(cmd, local_env, fd_in, STDOUT_FILENO);
+	exit_status = fork_and_execute(cmd, local_env, fd_in, pipe_fd[1]);
 	if (fd_in != -1)
 		close(fd_in);
-	if (!is_last)
-		close(pipe_fd[1]);
+	close(pipe_fd[1]);
+	return (exit_status);
+}
+
+static int	execute_pipeline_last_cmd(t_command *cmd, \
+									t_env *local_env,
+									int fd_in)
+{
+	int	exit_status;
+
+	exit_status = fork_and_execute(cmd, local_env, fd_in, STDOUT_FILENO);
+	if (fd_in != -1)
+		close(fd_in);
 	return (exit_status);
 }
 
@@ -71,11 +81,14 @@ void	handle_multiply_cmds(t_command *cmd, t_env *local_env)
 	while (current)
 	{
 		if (current->next)
-			g_last_exit_status = execute_pipeline_cmd(
-				current, local_env, fd_in, pipe_fd, 0);
+			g_last_exit_status = execute_pipeline_cmd(current, \
+														local_env, \
+														fd_in, \
+														pipe_fd);
 		else
-			g_last_exit_status = execute_pipeline_cmd(
-				current, local_env, fd_in, pipe_fd, 1);
+			g_last_exit_status = execute_pipeline_last_cmd(current, \
+															local_env, \
+															fd_in);
 		if (current->next)
 			fd_in = pipe_fd[0];
 		current = current->next;

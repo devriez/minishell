@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 19:08:36 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/11 20:53:12 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/12 18:35:48 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,15 @@ static bool	is_n_flag(char *flag)
 		return (false);
 }
 
-static bool	is_empty_flag(char *flag)
-{
-	if (!flag || *flag != '-')
-		return (false);
-	flag ++;
-	if (*flag == '\0')
-		return (true);
-	return (false);
-}
+// static bool	is_empty_flag(char *flag)
+// {
+// 	if (!flag || *flag != '-')
+// 		return (false);
+// 	flag ++;
+// 	if (*flag == '\0')
+// 		return (true);
+// 	return (false);
+// }
 
 static void	print_arg(t_env *env, char *arg)
 {
@@ -79,4 +79,3 @@ int	echo_builtin(t_command *cmd, t_env *env)
 		printf("\n");
 	return (0);
 }
-

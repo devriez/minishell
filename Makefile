@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 #fix it !!!!
-CC_FLAGS = 
+CC_FLAGS = -Werror -Wall -Wextra
 
 SRC_DIR = src
 INCLUDES_DIR = includes

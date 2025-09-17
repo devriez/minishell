@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/11 21:36:31 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/12 19:29:06 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static char	*get_cd_path(t_command *cmd, t_env *local_env)
 	input = NULL;
 	if (cmd->args)
 		input = cmd->args[0];
-	if (!input || ft_strcmp(input, "~") == 0)
+	if (!input || ft_strcmp(input, "~") == 0 || ft_strcmp(input, "..") == 0)
 	{
 		path = ft_strdup(get_env_var_val(local_env, "HOME"));
 		if (!path)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd_path.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 19:46:09 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/11 21:28:14 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/12 17:48:44 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*get_cmd_path(char *cmd_name, t_env *local_env)
 	i = 0;
 	paths_str = get_path_from_env(local_env);
 	if (!paths_str)
-		return NULL;
+		return (NULL);
 	paths_arr = ft_split(paths_str, ':');
 	if (!paths_arr)
 		return (NULL);

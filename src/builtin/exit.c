@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 13:26:26 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/11 21:20:10 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/12 18:07:39 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static long long ft_atoi_long(const char *str)
+static long long	ft_atoi_long(const char *str)
 {
-	long long result;
-	int sign;
+	long long	result;
+	int			sign;
 
 	result = 0;
 	sign = 1;
@@ -33,7 +33,7 @@ static long long ft_atoi_long(const char *str)
 	return (result * sign);
 }
 
-static bool is_numeric(char *str)
+static bool	is_numeric(char *str)
 {
 	if (!str || !*str)
 		return (false);
@@ -55,7 +55,7 @@ static bool is_numeric(char *str)
 int	exit_builtin(t_command *cmd)
 {
 	long long int	exit_status;
-	
+
 	if (!cmd->args || !cmd->args[0])
 		exit_status = 0;
 	else if (cmd->args[1])

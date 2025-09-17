@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_and_del.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 17:22:53 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/11 13:46:00 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/12 17:45:14 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	remove_envv(t_env **local_env, char *var_name)
 {
 	t_env	*current;
 	t_env	*prev;
-	
+
 	current = *local_env;
 	prev = NULL;
 	while (current)
