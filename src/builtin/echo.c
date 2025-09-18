@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 19:08:36 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/15 20:01:30 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/18 09:27:56 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ int	echo_builtin(t_command *cmd, t_env *env)
 	int		i;
 	bool	n_flag;
 
-	i = 1;  // Start from args[1], skip command name
+	i = 0;  // Start from args[0], first argument
 	n_flag = false;
-	if (!cmd->args || !cmd->args[1])
+	if (!cmd->args || !cmd->args[0])
 	{
 		printf("\n");
 		return (0);

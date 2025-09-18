@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 17:04:54 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/15 19:56:59 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/18 09:27:56 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ int	env_builtin(t_command *cmd, t_env *local_env)
 {
 	t_env	*env_node;
 
-	if (cmd->args && cmd->args[1])
+	if (cmd->args && cmd->args[0])
 	{
-		printf("env: %s: No such file or directory\n", cmd->args[1]);
+		printf("env: %s: No such file or directory\n", cmd->args[0]);
 		return (127);
 	}
 	env_node = local_env;

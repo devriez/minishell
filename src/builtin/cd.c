@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/15 20:01:30 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/18 09:27:56 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*get_cd_path(t_command *cmd, t_env *local_env)
 
 	input = NULL;
 	if (cmd->args)
-		input = cmd->args[1];  // First argument, not command name
+		input = cmd->args[0];  // First argument
 	if (!input || ft_strcmp(input, "~") == 0)
 	{
 		path = ft_strdup(get_env_var_val(local_env, "HOME"));

@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 00:00:00 by johartma          #+#    #+#             */
-/*   Updated: 2025/09/15 19:16:51 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/18 09:28:07 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,51 @@ char	**build_args_array(t_tokens *tokens, size_t start, size_t end)
 	}
 	args[arg_index] = NULL;
 	return (args);
+}
+
+static char	**build_args_only_array(t_tokens *tokens, size_t start, size_t end)
+{
+	char	**all_args;
+	char	**args_only;
+	size_t	word_count;
+	size_t	i;
+
+	all_args = build_args_array(tokens, start, end);
+	if (!all_args || !all_args[0])
+		return (all_args);
+	word_count = 0;
+	while (all_args[word_count])
+		word_count++;
+	if (word_count == 1)
+	{
+		free_args_array(all_args);
+		args_only = malloc(sizeof(char *));
+		if (!args_only)
+			return (NULL);
+		args_only[0] = NULL;
+		return (args_only);
+	}
+	args_only = malloc(sizeof(char *) * word_count);
+	if (!args_only)
+	{
+		free_args_array(all_args);
+		return (NULL);
+	}
+	i = 0;
+	while (i < word_count - 1)
+	{
+		args_only[i] = ft_strdup(all_args[i + 1]);
+		if (!args_only[i])
+		{
+			free_args_array(all_args);
+			free_args_array(args_only);
+			return (NULL);
+		}
+		i++;
+	}
+	args_only[i] = NULL;
+	free_args_array(all_args);
+	return (args_only);
 }
 
 static t_redirect	*create_redirect_node(t_redirect_type type, char *file, int fd)
@@ -236,28 +281,31 @@ size_t	*find_pipe_positions(t_tokens *tokens, size_t count, size_t *pipe_count)
 t_command	*parse_single_command(t_tokens *tokens, size_t start, size_t end)
 {
 	t_command	*cmd;
-	char		**args;
+	char		**all_args;
 
 	cmd = malloc(sizeof(t_command));
 	if (!cmd)
 		return (NULL);
-	args = build_args_array(tokens, start, end);
-	if (!args || !args[0])
+	all_args = build_args_array(tokens, start, end);
+	if (!all_args || !all_args[0])
 	{
 		free(cmd);
-		free_args_array(args);
+		free_args_array(all_args);
 		return (NULL);
 	}
-	cmd->name = ft_strdup(args[0]);
-	cmd->args = args;
+	cmd->name = ft_strdup(all_args[0]);
+	cmd->args = build_args_only_array(tokens, start, end);
 	cmd->redirections = parse_redirections(tokens, start, end);
 	cmd->next = NULL;
-	if (!cmd->name)
+	if (!cmd->name || !cmd->args)
 	{
+		free(cmd->name);
 		free_args_array(cmd->args);
 		free(cmd);
+		free_args_array(all_args);
 		return (NULL);
 	}
+	free_args_array(all_args);
 	return (cmd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 13:26:26 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/15 20:07:17 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/18 09:27:56 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ int	exit_builtin(t_command *cmd)
 {
 	long long int	exit_status;
 	
-	if (!cmd->args || !cmd->args[1])
+	if (!cmd->args || !cmd->args[0])
 		exit_status = 0;
-	else if (cmd->args[2])
+	else if (cmd->args[1])
 	{
 		printf("exit: too many arguments\n");
 		exit_status = 1;
@@ -66,13 +66,13 @@ int	exit_builtin(t_command *cmd)
 		g_should_exit = 1;
 		return (exit_status);  // Return actual exit code
 	}
-	else if (!is_numeric(cmd->args[1]))
+	else if (!is_numeric(cmd->args[0]))
 	{
-		printf("exit: '%s': numeric argument required\n", cmd->args[1]);
+		printf("exit: '%s': numeric argument required\n", cmd->args[0]);
 		exit_status = 255;
 	}
 	else
-		exit_status = (unsigned char)ft_atoi_long(cmd->args[1]) % 256;
+		exit_status = (unsigned char)ft_atoi_long(cmd->args[0]) % 256;
 	g_last_exit_status = exit_status;
 	g_should_exit = 1;
 	return (exit_status);  // Return actual exit code, not special signal
