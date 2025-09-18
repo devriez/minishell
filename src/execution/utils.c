@@ -6,7 +6,7 @@
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 20:38:48 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/18 09:27:56 by johartma         ###   ########.fr       */
+/*   Updated: 2025/09/18 09:38:45 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	handle_signal(int signum)
 {
 	if (signum == SIGINT)
 	{
+		printf("SIGINT DETECTED\n");
 		g_last_exit_status = 130;
 		write(STDOUT_FILENO, "\n", 1);
 		rl_on_new_line();
