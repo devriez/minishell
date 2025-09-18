@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/12 18:32:48 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/18 18:43:22 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	execute_cmd(t_command *cmd, t_env *local_env)
 		handle_single_cmd(cmd, local_env);
 }
 
-t_command	*read_and_parse(void)
+t_command	*read_and_parse(t_env *env)
 {
 	char		*line;
 	t_command	*cmd;
@@ -35,12 +35,7 @@ t_command	*read_and_parse(void)
 		printf("exit\n");
 		return (NULL);
 	}
-	if (line[0] == '\0')
-	{
-		free(line);
-		return (NULL);
-	}
-	cmd = johannes_func(line);
+	cmd = parse_command_line(line, env);
 	free(line);
 	return (cmd);
 }
@@ -57,15 +52,12 @@ int	main(int argc, char **argv, char **envp)
 	local_env = env_to_list(envp);
 	while (1)
 	{
-		cmd = read_and_parse();
+		cmd = read_and_parse(local_env);
 		if (!cmd)
 			break ;
 		execute_cmd(cmd, local_env);
 		free_command(cmd);
 	}
 	free_env_list(local_env);
-	rl_clear_history();
-	rl_cleanup_after_signal();
-	clear_history();
 	return (0);
 }

@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CC_FLAGS = -std=c11 -Wall -Wextra -Werror -g
+CC_FLAGS = -std=c11 -Wall -Wextra -Werror
 
 SRC_DIR = src
 INCLUDES_DIR = includes
@@ -24,6 +24,7 @@ SRCS = $(SRC_DIR)/main.c \
 		$(SRC_DIR)/builtin/export.c \
 		$(SRC_DIR)/builtin/pwd.c \
 		$(SRC_DIR)/builtin/unset.c \
+		$(SRC_DIR)/env/env_to_list.c \
 		$(SRC_DIR)/env/env_utils.c \
 		$(SRC_DIR)/env/set_envv.c \
 		$(SRC_DIR)/env/convert_env.c \

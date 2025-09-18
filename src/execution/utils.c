@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devriez <devriez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 20:38:48 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/11 21:31:59 by devriez          ###   ########.fr       */
+/*   Updated: 2025/09/18 18:06:08 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	handle_signal(int signum)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+	signal(SIGINT, handle_signal);
 }
 
 char	**join_str_with_arr(char *str, char **arr)
