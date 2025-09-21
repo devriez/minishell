@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 21:46:13 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/12 18:39:31 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/19 20:29:33 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ static int	fork_and_execute(t_command *cmd, \
 		child_setup(fd_in, fd_out);
 		exit(child_process(cmd, local_env));
 	}
+	setup_signals(ignore_sigint_print_newline);
 	waitpid(pid, &status, 0);
+	setup_signals(set_sigint);
 	if (WIFEXITED(status))
 		exit_status = WEXITSTATUS(status);
 	else
@@ -70,7 +72,7 @@ static int	execute_pipeline_last_cmd(t_command *cmd, \
 	return (exit_status);
 }
 
-void	handle_multiply_cmds(t_command *cmd, t_env *local_env)
+void	handle_multiply_cmds(t_command *cmd, t_mini *mini)
 {
 	t_command	*current;
 	int			fd_in;
@@ -81,13 +83,13 @@ void	handle_multiply_cmds(t_command *cmd, t_env *local_env)
 	while (current)
 	{
 		if (current->next)
-			g_last_exit_status = execute_pipeline_cmd(current, \
-														local_env, \
+			mini->last_exit_status = execute_pipeline_cmd(current, \
+														mini->env, \
 														fd_in, \
 														pipe_fd);
 		else
-			g_last_exit_status = execute_pipeline_last_cmd(current, \
-															local_env, \
+			mini->last_exit_status = execute_pipeline_last_cmd(current, \
+															mini->env, \
 															fd_in);
 		if (current->next)
 			fd_in = pipe_fd[0];
@@ -95,7 +97,7 @@ void	handle_multiply_cmds(t_command *cmd, t_env *local_env)
 	}
 }
 
-void	handle_single_cmd(t_command *cmd, t_env *local_env)
+void	handle_single_cmd(t_command *cmd, t_mini *mini)
 {
 	int	saved_stdin;
 	int	saved_stdout;
@@ -108,16 +110,16 @@ void	handle_single_cmd(t_command *cmd, t_env *local_env)
 									&saved_stdin, \
 									&saved_stdout))
 			{
-				g_last_exit_status = 1;
+				mini->last_exit_status = 1;
 				return ;
 			}
 		}
-		g_last_exit_status = execute_builtin(cmd, local_env);
+		mini->last_exit_status = execute_builtin(cmd, mini->env);
 		if (cmd->redirections)
 			restore_parent_io(saved_stdin, saved_stdout);
 	}
 	else
-		g_last_exit_status = fork_and_execute(cmd, local_env, \
+		mini->last_exit_status = fork_and_execute(cmd, mini->env, \
 												STDIN_FILENO, \
 												STDOUT_FILENO);
 }

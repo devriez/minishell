@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:20:57 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/12 18:06:17 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/19 19:35:33 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ void	child_setup(int fd_in, int fd_out)
 		dup2(fd_out, STDOUT_FILENO);
 		close(fd_out);
 	}
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	setup_signals_to_default();
+	// signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_DFL);
 }
 
 static int	execute_external(t_command *cmd, t_env *local_env)

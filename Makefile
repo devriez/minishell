@@ -29,6 +29,7 @@ SRCS = $(SRC_DIR)/main.c \
 		$(SRC_DIR)/execution/execution.c \
 		$(SRC_DIR)/execution/get_cmd_path.c \
 		$(SRC_DIR)/execution/handle_redirect.c \
+		$(SRC_DIR)/execution/handle_signal.c \
 		$(SRC_DIR)/execution/utils.c \
 
 

@@ -6,66 +6,61 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/12 18:32:48 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/19 20:29:33 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_last_exit_status = 0;
+volatile sig_atomic_t	g_last_signal = 0;
 
-void	execute_cmd(t_command *cmd, t_env *local_env)
+static void	execute_cmd(t_command *cmd, t_mini *mini)
 {
 	if (!cmd)
 		return ;
 	if (cmd->next)
-		handle_multiply_cmds(cmd, local_env);
+		handle_multiply_cmds(cmd, mini);
 	else
-		handle_single_cmd(cmd, local_env);
+		handle_single_cmd(cmd, mini);
 }
 
-t_command	*read_and_parse(void)
+static char	*read_input(t_mini *mini)
 {
-	char		*line;
-	t_command	*cmd;
+	char	*line;
 
 	line = readline("minishell> ");
+	if (g_last_signal == SIGINT)
+		mini->last_exit_status = 130;
 	if (!line)
 	{
 		printf("exit\n");
 		return (NULL);
 	}
-	if (line[0] == '\0')
-	{
-		free(line);
-		return (NULL);
-	}
-	cmd = johannes_func(line);
-	free(line);
-	return (cmd);
+	return (line);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env		*local_env;
 	t_command	*cmd;
+	t_mini		mini;
+	char		*line;
 
 	(void)argc;
 	(void)argv;
-	signal(SIGINT, handle_signal);
-	signal(SIGQUIT, SIG_IGN);
-	local_env = env_to_list(envp);
+	setup_signals(set_sigint);
+	mini.env = env_to_list(envp);
 	while (1)
 	{
-		cmd = read_and_parse();
-		if (!cmd)
+		line = read_input(&mini);
+		if (!line)
 			break ;
-		execute_cmd(cmd, local_env);
+		if (ft_strcmp(line, "") == 0)
+			continue ;
+		cmd = johannes_func(line);
+		free(line);
+		execute_cmd(cmd, &mini);
 		free_command(cmd);
 	}
-	free_env_list(local_env);
-	rl_clear_history();
-	rl_cleanup_after_signal();
-	clear_history();
+	free_env_list(mini.env);
 	return (0);
 }
