@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 18:17:27 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/19 20:33:15 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/22 17:30:50 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,11 @@ void	ignore_sigint_print_newline(int signum)
 	g_last_signal = SIGINT;
 }
 
-void	signal_handler_wait(int signum)
-{
-	(void)signum;
-}
-
 void	setup_signals_to_default(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 }
-
-
 
 void	setup_signals(void (*signal_handler)(int))
 {

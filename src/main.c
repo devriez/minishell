@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/19 20:29:33 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/22 16:55:39 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void	execute_cmd(t_command *cmd, t_mini *mini)
 {
 	if (!cmd)
 		return ;
+	mini->pid_count = 0;
 	if (cmd->next)
 		handle_multiply_cmds(cmd, mini);
 	else
@@ -30,7 +31,10 @@ static char	*read_input(t_mini *mini)
 
 	line = readline("minishell> ");
 	if (g_last_signal == SIGINT)
+	{
 		mini->last_exit_status = 130;
+		g_last_signal = 0;
+	}
 	if (!line)
 	{
 		printf("exit\n");

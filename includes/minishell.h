@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/19 20:29:33 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/09/22 16:42:54 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ typedef struct s_mini
 {
 	t_env	*env;
 	int		last_exit_status;
+	pid_t	pids[256];
+	int		pid_count;
 }	t_mini;
 
 //execution
@@ -85,6 +87,7 @@ int			redirect_in_parent(t_redirect *redir, \
 void		restore_parent_io(int saved_stdin, int saved_stdout);
 //handle_signal.c
 void		set_sigint(int signum);
+void		ignore_sigint(int signum);
 void		ignore_sigint_print_newline(int signum);
 void		signal_handler_wait(int signum);
 void		setup_signals_to_default(void);
