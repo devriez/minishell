@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 21:46:13 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/22 17:29:46 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/10/27 16:18:22 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,13 @@ static int	fork_and_execute(t_command *cmd, \
 	}
 	if (pid == 0)
 	{
+		if (cmd->next && is_builtin(cmd->next->name))
+			close(fd_out);
 		child_setup(fd_in, fd_out);
 		exit(child_process(cmd, mini->env));
 	}
+	if (cmd->next && is_builtin(cmd->next->name))
+		close(fd_out);
 	setup_signals(ignore_sigint_print_newline);
 	mini->pids[mini->pid_count] = pid;
 	mini->pid_count++;

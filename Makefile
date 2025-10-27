@@ -24,6 +24,7 @@ SRCS = $(SRC_DIR)/main.c \
 		$(SRC_DIR)/env/env_utils.c \
 		$(SRC_DIR)/env/get_and_del.c \
 		$(SRC_DIR)/env/set_envv.c \
+		$(SRC_DIR)/env/update_env.c \
 		$(SRC_DIR)/execution/child_process.c \
 		$(SRC_DIR)/execution/error_and_free.c \
 		$(SRC_DIR)/execution/execution.c \

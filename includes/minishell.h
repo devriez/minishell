@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/22 16:42:54 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/10/27 17:51:39 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_env
 typedef struct s_mini
 {
 	t_env	*env;
+	char	*shell_name;
 	int		last_exit_status;
 	pid_t	pids[256];
 	int		pid_count;
@@ -122,6 +123,8 @@ void		remove_envv(t_env **local_env, char *var_name);
 //	set_envv
 int			set_envv_from_pair(t_env **local_env, char *name, char *value);
 int			set_envv_from_str(t_env **local_env, char *name_equal_value);
+//	update_env
+void		update_shlvl(t_env	*local_env);
 
 //delete !!!!!!!!
 t_command	*johannes_func(char *line);

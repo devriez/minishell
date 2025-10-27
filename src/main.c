@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/22 16:55:39 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/10/27 17:52:32 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	setup_signals(set_sigint);
 	mini.env = env_to_list(envp);
+	mini.shell_name = argv[0]; //add
+	update_shlvl(mini.env); //add
 	while (1)
 	{
 		line = read_input(&mini);
