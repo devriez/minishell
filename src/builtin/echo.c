@@ -6,13 +6,13 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 19:08:36 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/03 17:30:03 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/10/30 17:40:19 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_n_flag(char *flag)
+static bool	is_n_flag(char *flag)
 {
 	if (!flag || *flag != '-')
 		return (false);
@@ -27,40 +27,36 @@ bool	is_n_flag(char *flag)
 		return (false);
 }
 
-bool	is_empty_flag(char *flag)
+static void	print_arg(char *arg)
 {
-	if (!flag || *flag != '-')
-		return (false);
-	flag ++;
-	if (*flag == '\0')
-		return (true);
-	return (false);
+	printf("%s", arg);
 }
 
 int	echo_builtin(t_command *cmd)
 {
 	int		i;
-	bool	n_flag_found;
+	bool	n_flag;
 
 	i = 0;
-	n_flag_found = false;
-	if (!cmd->args)
-		return (printf("\n"), 0);
+	n_flag = false;
+	if (!cmd->args || !cmd->args[0])
+	{
+		printf("\n");
+		return (0);
+	}
 	while (cmd->args[i] && is_n_flag(cmd->args[i]))
 	{
-		n_flag_found = true;
-		i ++;
+		n_flag = true;
+		i++;
 	}
-	if (is_empty_flag(cmd->args[i]))
-		i ++;
 	while (cmd->args[i])
 	{
-		printf("%s", cmd->args[i]);
+		print_arg(cmd->args[i]);
 		if (cmd->args[i + 1])
 			printf(" ");
-		i ++;
+		i++;
 	}
-	if (n_flag_found != true)
+	if (!n_flag)
 		printf("\n");
 	return (0);
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   set_envv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 19:11:40 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/03 14:51:55 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/10/28 21:34:18 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*create_env_node(char *name, char *value)
+static t_env	*create_env_node(char *name, char *value)
 {
 	t_env	*node;
 
@@ -35,7 +35,7 @@ t_env	*create_env_node(char *name, char *value)
 	return (node);
 }
 
-void	add_node_to_end(t_env **head, t_env	*new_node)
+static void	add_node_to_end(t_env **head, t_env	*new_node)
 {
 	t_env	*last;
 
@@ -48,14 +48,13 @@ void	add_node_to_end(t_env **head, t_env	*new_node)
 	while (last->next != NULL)
 		last = last->next;
 	last->next = new_node;
-	return ;
 }
 
-int	rewrite_env_var(t_env *lockal_env, char *var_name, char *var_value)
+static int	rewrite_env_var(t_env *local_env, char *var_name, char *var_value)
 {
 	t_env	*current;
 
-	current = lockal_env;
+	current = local_env;
 	while (current)
 	{
 		if (ft_strcmp(current->name, var_name) == 0)
@@ -76,28 +75,32 @@ int	rewrite_env_var(t_env *lockal_env, char *var_name, char *var_value)
 	return (1);
 }
 
-int	set_envv_from_pair(t_env **lockal_env, char *var_name, char *var_value)
+int	set_envv_from_pair(t_env **local_env, char *var_name, char *var_value)
 {
 	t_env	*new_node;
 
 	if (!is_correct_varname(var_name))
 	{
-		printf("create new envv: not a valid name %s", var_name);
+		ft_putstr_fd("export: `", STDERR_FILENO);
+		ft_putstr_fd(var_name, STDERR_FILENO);
+		ft_putstr_fd("=", STDERR_FILENO);
+		ft_putstr_fd(var_value, STDERR_FILENO);
+		ft_putstr_fd("' not a valid identifier\n", STDERR_FILENO);
 		return (1);
 	}
-	if (is_env_var_exist(*lockal_env, var_name))
-		return (rewrite_env_var(*lockal_env, var_name, var_value));
+	if (is_env_var_exist(*local_env, var_name))
+		return (rewrite_env_var(*local_env, var_name, var_value));
 	else
 	{
 		new_node = create_env_node(var_name, var_value);
 		if (!new_node)
 			return (1);
-		add_node_to_end(lockal_env, new_node);
+		add_node_to_end(local_env, new_node);
 		return (0);
 	}
 }
 
-int	set_envv_from_str(t_env **lockal_env, char *name_equal_value)
+int	set_envv_from_str(t_env **local_env, char *name_equal_value)
 {
 	char	**arr_name_value;
 	int		status;
@@ -106,7 +109,7 @@ int	set_envv_from_str(t_env **lockal_env, char *name_equal_value)
 	arr_name_value = parse_envv(name_equal_value);
 	if (arr_name_value == NULL)
 		return (1);
-	status = set_envv_from_pair(lockal_env, \
+	status = set_envv_from_pair(local_env, \
 								arr_name_value[0], \
 								arr_name_value[1]);
 	free(arr_name_value[0]);

@@ -6,105 +6,103 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/08/29 16:24:48 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/10/31 12:55:17 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_last_exit_status = 0;
+volatile sig_atomic_t	g_last_signal = 0;
 
-void	fork_and_execute(t_command *cmd, t_env *lockal_envp)
+static void	execute_cmd(t_command *cmd, t_mini *mini)
 {
-	
-}
-
-// void	fork_and_execute(t_command *cmd, t_env *lockal_envp)
-// {
-// 	pid_t	pid;
-
-// 	pid = fork();
-// 	if (pid == -1)
-// 		printf("Error with forking!!!!!!");
-// 	else if (pid == 0)
-// 		child_procces(cmd, envp);
-// 	waitpid(pid, NULL, 0);
-// }
-
-void	redefine_and_close_fd(t_command *cmd, int *pipe_fd, int fd_0_last_pipe)
-{
-	if (fd_0_last_pipe)
-	{
-		dup2(fd_0_last_pipe, STDIN_FILENO);
-		close(fd_0_last_pipe);
-	}
+	if (!cmd)
+		return ;
+	mini->pid_count = 0;
 	if (cmd->next)
+		handle_multiply_cmds(cmd, mini);
+	else
+		handle_single_cmd(cmd, mini);
+	if (mini->last_exit_status == 131)
 	{
-		fd_0_last_pipe = pipe_fd[0];
-		dup2(pipe_fd[1], STDOUT_FILENO);
-		close(pipe_fd[1]);
+		write(1, "Quit (core dumped)\n", 19);
 	}
 }
 
-void	handle_multiply_cmds(t_command *cmd, t_env *lockal_envp)
-{
-	
-}
-
-// void	handle_multiply_cmds(t_command *cmd, t_env *lockal_envp)
+// static char	*read_input(t_mini *mini)
 // {
-// 	int	pipe_fd[2];
-// 	int	fd_0_last_pipe;
+// 	char	*line;
 
-// 	fd_0_last_pipe == 0;
-// 	while (cmd)
+// 	line = readline("minishell> ");
+// 	if (g_last_signal == SIGINT)
 // 	{
-// 		if (cmd->next)
-// 		{
-// 			if (pipe(pipe_fd) != -1)
-// 				printf("Error with making pipe!!!!!");
-// 		}
-// 		redefine_and_close_fd(cmd, pipe_fd, fd_0_last_pipe);
-// 		fork_and_execute(cmd, envp);
-// 		cmd = cmd->next;
+// 		mini->last_exit_status = 130;
+// 		g_last_signal = 0;
 // 	}
+// 	if (!line)
+// 	{
+// 		printf("exit\n");
+// 		return (NULL);
+// 	}
+// 	add_history(line);
+// 	return (line);
 // }
 
-void	handle_single_cmd(t_command *cmd, t_env *lockal_envp)
-{
-	char	*cmd_name;
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_command	*cmd;
+// 	t_mini		mini;
+// 	char		*line;
 
-	cmd_name = cmd->args[0];
-	if (is_builtin(cmd_name))
-			g_last_exit_status = execute_internal(cmd, lockal_envp);
-	else
-	{
-		fork_and_execute(cmd, lockal_envp);
-	}
-}
+// 	(void)argc;
+// 	(void)argv;
+// 	mini.last_exit_status = 0;
+// 	setup_signals(set_sigint);
+// 	mini.env = env_to_list(envp);
+// 	mini.shell_name = argv[0];
+// 	update_shlvl(mini.env);
+// 	while (1)
+// 	{
+// 		line = read_input(&mini);
+// 		if (!line)
+// 			break ;
+// 		if (ft_strcmp(line, "") == 0)
+// 			continue ;
+// 		cmd = parse_command_line(line, mini);
+// 		free(line);
+// 		execute_cmd(cmd, &mini);
+// 		free_command(cmd);
+// 	}
+// 	free_env_list(mini.env);
+// 	return (0);
+// }
 
+//!!!!!!!!!!!! delet next function and uncomment previous two !!!!!!!!!!!!!!!!1
 int	main(int argc, char **argv, char **envp)
 {
-	char		*line;
 	t_command	*cmd;
-	t_env		*lockal_envp;
+	t_mini		mini;
+	char		*line = "cat < /tmp/a_very_long_file_name_that_might_cause_issues.txt";
 
-	signal(SIGINT, handle_signal);
-	signal(SIGQUIT, SIG_IGN);
-	lockal_envp = env_to_list(envp);
-	while (1)
-	{
-		line = readline("minishell> ");
-		if (line == NULL)
-		{
-			printf("exit\n");
-			exit(0);
-		}
-		cmd = johannes_func(line);
-		if (cmd->next)
-			handle_multiply_cmds(cmd, lockal_envp);
-		else
-			handle_single_cmd(cmd, lockal_envp);
-	}
+	(void)argc;
+	(void)argv;
+	mini.last_exit_status = 0;
+	setup_signals(set_sigint);
+	mini.env = env_to_list(envp);
+	mini.shell_name = argv[0];
+	update_shlvl(mini.env);
+	// while (1)
+	// {
+	//line = read_input(&mini);
+	// if (!line)
+	// 	break ;
+	// if (ft_strcmp(line, "") == 0)
+	// 	continue ;
+	cmd = parse_command_line(line, mini);
+	//free(line);
+	execute_cmd(cmd, &mini);
+	free_command(cmd);
+	// }
+	free_env_list(mini.env);
 	return (0);
 }

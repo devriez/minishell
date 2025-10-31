@@ -1,20 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   utils4.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/18 10:43:14 by devriez           #+#    #+#             */
-/*   Updated: 2025/10/20 15:22:52 by johartma         ###   ########.fr       */
+/*   Created: 2025/10/28 16:56:10 by johartma          #+#    #+#             */
+/*   Updated: 2025/10/28 17:18:44 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/minishell.h"
 
-void	ft_putstr_fd(const char *s, int fd)
+int	is_parent(char c)
 {
-	if (!s)
-		return ;
-	write(fd, s, ft_strlen(s));
+	return (c == '"' || c == 39);
+}
+
+int	op_len(const char *s)
+{
+	if (!s || !*s)
+		return (0);
+	if (s[0] == '<' && s[1] == '<')
+		return (2);
+	if (s[0] == '>' && s[1] == '>')
+		return (2);
+	if (s[0] == '<' || s[0] == '>' || s[0] == '|')
+		return (1);
+	return (0);
 }

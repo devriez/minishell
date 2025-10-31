@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_to_list.c                                      :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/04 19:50:06 by amoiseik          #+#    #+#             */
-/*   Updated: 2025/09/03 15:17:51 by amoiseik         ###   ########.fr       */
+/*   Created: 2025/09/10 17:04:54 by devriez           #+#    #+#             */
+/*   Updated: 2025/09/12 17:44:49 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*env_to_list(char **envp)
+int	env_builtin(t_command *cmd, t_env *local_env)
 {
-	int		i;
-	t_env	*lockal_env;
-	char	**name_value;
+	t_env	*env_node;
 
-	lockal_env = NULL;
-	i = 0;
-	while (envp[i])
+	if (cmd->args && cmd->args[0])
 	{
-		set_envv_from_str(&lockal_env, envp[i]);
-		i ++;
+		printf("env: %s: No such file or directory\n", cmd->args[0]);
+		return (127);
 	}
-	return (lockal_env);
+	env_node = local_env;
+	while (env_node)
+	{
+		if (env_node->value)
+			printf("%s=%s\n", env_node->name, env_node->value);
+		env_node = env_node->next;
+	}
+	return (0);
 }

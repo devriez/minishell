@@ -3,37 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:08:08 by devriez           #+#    #+#             */
-/*   Updated: 2025/09/03 17:34:02 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/10/20 11:28:07 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	execute_internal(t_command *cmd, t_env *lockal_env)
+int	execute_builtin(t_command *cmd, t_env *local_env)
 {
+	int	exit_status;
+
+	exit_status = 1;
 	if (ft_strcmp(cmd->name, "echo") == 0)
-		echo_builtin(cmd);
-	if (ft_strcmp(cmd->name, "cd") == 0)
-		cd_builtin(cmd, lockal_env);
-	if (ft_strcmp(cmd->name, "pwd") == 0)
-		pwd_builtin(lockal_env);
-	if (ft_strcmp(cmd->name, "export"))
-		export_builtin(cmd, lockal_env);
-	return (0);
+		exit_status = echo_builtin(cmd);
+	else if (ft_strcmp(cmd->name, "cd") == 0)
+		exit_status = cd_builtin(cmd, local_env);
+	else if (ft_strcmp(cmd->name, "pwd") == 0)
+		exit_status = pwd_builtin(local_env);
+	else if (ft_strcmp(cmd->name, "export") == 0)
+		exit_status = export_builtin(cmd, local_env);
+	else if (ft_strcmp(cmd->name, "unset") == 0)
+		exit_status = unset_builtin(cmd, &local_env);
+	else if (ft_strcmp(cmd->name, "env") == 0)
+		exit_status = env_builtin(cmd, local_env);
+	else if (ft_strcmp(cmd->name, "exit") == 0)
+		exit_status = exit_builtin(cmd);
+	return (exit_status);
 }
 
 bool	is_builtin(char *cmd)
 {
-	if (ft_strcmp(cmd, "echo") == 0 || \
-		ft_strcmp(cmd, "cd") == 0 || \
-		ft_strcmp(cmd, "pwd") == 0 || \
-		ft_strcmp(cmd, "export") == 0 || \
-		ft_strcmp(cmd, "unset") == 0 || \
-		ft_strcmp(cmd, "env") == 0 || \
-		ft_strcmp(cmd, "exit") == 0)
+	if (ft_strcmp(cmd, "echo") == 0 
+		|| ft_strcmp(cmd, "cd") == 0 
+		|| ft_strcmp(cmd, "pwd") == 0 
+		|| ft_strcmp(cmd, "export") == 0 
+		|| ft_strcmp(cmd, "unset") == 0 
+		|| ft_strcmp(cmd, "env") == 0 
+		|| ft_strcmp(cmd, "exit") == 0)
 		return (true);
 	return (false);
 }
