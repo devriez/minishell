@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 23:00:01 by devriez           #+#    #+#             */
-/*   Updated: 2025/10/30 18:00:30 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/10/31 13:48:26 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int				echo_builtin(t_command *cmd);
 int				env_builtin(t_command *cmd, t_env *local_env);
 int				execute_builtin(t_command *cmd, t_env *local_env);
 bool			is_builtin(char *cmd);
-int				exit_builtin(t_command *cmd);
+int				exit_builtin(t_command *cmd, t_env *local_env);
 int				export_builtin(t_command *cmd, t_env *local_env);
 int				pwd_builtin(t_env *local_env);
 int				unset_builtin(t_command *cmd, t_env **local_env);

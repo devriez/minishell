@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 13:26:26 by devriez           #+#    #+#             */
-/*   Updated: 2025/10/30 18:35:21 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/10/31 13:49:21 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static bool	is_numeric(char *str)
 	return (true);
 }
 
-int	exit_builtin(t_command *cmd)
+int	exit_builtin(t_command *cmd, t_env *local_env)
 {
 	long long int	exit_status;
 
@@ -71,5 +71,7 @@ int	exit_builtin(t_command *cmd)
 	}
 	else
 		exit_status = (unsigned char)ft_atoi_long(cmd->args[0]);
-	return (exit_status);
+	free_env_list(local_env);
+	free_command(cmd);
+	exit(exit_status);
 }

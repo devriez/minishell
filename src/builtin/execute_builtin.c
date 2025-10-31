@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:08:08 by devriez           #+#    #+#             */
-/*   Updated: 2025/10/20 11:28:07 by johartma         ###   ########.fr       */
+/*   Updated: 2025/10/31 13:48:34 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	execute_builtin(t_command *cmd, t_env *local_env)
 	else if (ft_strcmp(cmd->name, "env") == 0)
 		exit_status = env_builtin(cmd, local_env);
 	else if (ft_strcmp(cmd->name, "exit") == 0)
-		exit_status = exit_builtin(cmd);
+		exit_status = exit_builtin(cmd, local_env);
 	return (exit_status);
 }
 
