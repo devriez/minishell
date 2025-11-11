@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: johartma <johartma@student.42.de>          +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 18:00:02 by johartma          #+#    #+#             */
-/*   Updated: 2025/10/28 18:19:57 by johartma         ###   ########.fr       */
+/*   Updated: 2025/11/11 12:42:35 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,14 @@ t_command	*parse_single_command(t_tokens *tokens, size_t start, size_t end)
 	all_args = build_args_array(tokens, start, end);
 	if (!all_args || !all_args[0])
 	{
+		cmd->name = NULL;
+		cmd->args = NULL;
+		cmd->redirections = parse_redirections(tokens, start, end);
+		cmd->next = NULL;
 		free_args_array(all_args);
-		free(cmd);
-		return (NULL);
+		if (!cmd->redirections)
+			return (free(cmd), NULL);
+		return (cmd);
 	}
 	cmd->name = ft_strdup(all_args[0]);
 	cmd->args = build_args_only_array(tokens, start, end);
@@ -99,6 +104,32 @@ t_command	*parse_single_command(t_tokens *tokens, size_t start, size_t end)
 		return (free_cmd_and_args(cmd, all_args));
 	cmd->redirections = parse_redirections(tokens, start, end);
 	cmd->next = NULL;
-	free_args_array(all_args);
-	return (cmd);
+	return (free_args_array(all_args), cmd);
 }
+
+//old version, where minishell << EOF ddidn't work
+// t_command	*parse_single_command           part 1 of the line
+// (t_tokens *tokens, size_t start, size_t end)  part 2 of the line
+// {
+// 	t_command	*cmd;
+// 	char		**all_args;
+
+// 	cmd = malloc(sizeof(*cmd));
+// 	if (!cmd)
+// 		return (NULL);
+// 	all_args = build_args_array(tokens, start, end);
+// 	if (!all_args || !all_args[0])
+// 	{
+// 		free_args_array(all_args);
+// 		free(cmd);
+// 		return (NULL);
+// 	}
+// 	cmd->name = ft_strdup(all_args[0]);
+// 	cmd->args = build_args_only_array(tokens, start, end);
+// 	if (!cmd->name || !cmd->args)
+// 		return (free_cmd_and_args(cmd, all_args));
+// 	cmd->redirections = parse_redirections(tokens, start, end);
+// 	cmd->next = NULL;
+// 	free_args_array(all_args);
+// 	return (cmd);
+// }

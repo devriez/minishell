@@ -6,7 +6,7 @@
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:47:11 by devriez           #+#    #+#             */
-/*   Updated: 2025/10/31 13:37:07 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/11/11 12:06:56 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	main(int argc, char **argv, char **envp)
 // {
 // 	t_command	*cmd;
 // 	t_mini		mini;
-// 	char		*line = "cat < /tmp/a_very_long_file_name_that_might_cause_issues.txt";
+// 	char		*line = "cat << EOF";
 
 // 	(void)argc;
 // 	(void)argv;
